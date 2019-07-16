@@ -191,6 +191,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         mToDoTextBodyEditText = (EditText) view.findViewById(R.id.userToDoEditText);
         mToDoTextBodyDescription= (EditText) view.findViewById(R.id.userToDoDescription);
         mTodoSpinnerType= (Spinner) view.findViewById(R.id.spinner);
+        radioImportanceGroup = (RadioGroup) view.findViewById(R.id.radioImportance);
         mToDoDateSwitch = (SwitchCompat) view.findViewById(R.id.toDoHasDateSwitchCompat);
 //        mLastSeenTextView = (TextView)findViewById(R.id.toDoLastEditedTextView);
         mToDoSendFloatingActionButton = (FloatingActionButton) view.findViewById(R.id.makeToDoFloatingActionButton);
@@ -254,6 +255,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         mToDoTextBodyEditText.setText(mUserEnteredText);
         mToDoTextBodyDescription.setText(mUserEnteredDescription);
         setSpinText(mTodoSpinnerType, mUserType);
+        setRadioText(radioImportanceGroup, mUserImportance);
         InputMethodManager imm = (InputMethodManager) this.getActivity().getSystemService(INPUT_METHOD_SERVICE);
 //        imm.showSoftInput(mToDoTextBodyEditText, InputMethodManager.SHOW_IMPLICIT);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
@@ -311,6 +313,17 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         });
 
 
+
+        radioImportanceGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                int selectedId = radioImportanceGroup.getCheckedRadioButtonId();
+                RadioButton radioImportanceButton = (RadioButton) view.findViewById(selectedId);
+                mUserImportance = radioImportanceButton.getText().toString();
+            }
+        });
+
+
         mToDoDateSwitch.setChecked(mUserHasReminder && (mUserReminderDate != null));
         mToDoDateSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -347,14 +360,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                     makeResult(RESULT_OK);
                     getActivity().finish();
                 }
-                radioImportanceGroup = (RadioGroup) view.findViewById(R.id.radioImportance);
-                int selectedId = radioImportanceGroup.getCheckedRadioButtonId();
-                RadioButton radioImportanceButton = (RadioButton) view.findViewById(selectedId);
 
-//                Toast.makeText(getContext(),
-//                        radioImportanceButton.getText(), Toast.LENGTH_SHORT).show();
-
-                //ToDo the selected radio button should be saved some where
                 hideKeyboard(mToDoTextBodyEditText);
                 hideKeyboard(mToDoTextBodyDescription);
             }
@@ -490,6 +496,22 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         }
 
     }
+
+    private void setRadioText(RadioGroup radioImportanceGroup, String text){
+        if (text.equals("very important")){
+            radioImportanceGroup.check(R.id.radioVeryImportant);
+        }
+        if (text.equals("important")){
+            radioImportanceGroup.check(R.id.radioImportant);
+        }
+        if (text.equals("less important")){
+            radioImportanceGroup.check(R.id.radioLessImportant);
+        }
+        if (text.equals("not important")){
+            radioImportanceGroup.check(R.id.radioNotImportant);
+        }
+    }
+
 
     private void addType(String type){
         this.types.add(type);
@@ -727,7 +749,28 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     }
 
     private int getColorByType(){
-        if (mUserImportance.equals("")){
+        if (mUserImportance.equals("very important")){
+            try {
+                return color_by_type.get(mUserType)[3];
+            } catch (Exception e){
+                return color_by_type.get("default")[3];
+            }
+        }
+        if (mUserImportance.equals("important")){
+            try {
+                return color_by_type.get(mUserType)[2];
+            } catch (Exception e){
+                return color_by_type.get("default")[2];
+            }
+        }
+        if (mUserImportance.equals("less important")){
+            try {
+                return color_by_type.get(mUserType)[1];
+            } catch (Exception e){
+                return color_by_type.get("default")[1];
+            }
+        }
+        if (mUserImportance.equals("not important")){
             try {
                 return color_by_type.get(mUserType)[0];
             } catch (Exception e){
