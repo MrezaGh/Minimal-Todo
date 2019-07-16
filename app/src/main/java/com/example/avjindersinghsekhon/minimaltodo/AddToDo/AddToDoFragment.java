@@ -29,9 +29,13 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.content.ClipboardManager;
 import android.widget.Toast;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.example.avjindersinghsekhon.minimaltodo.Analytics.AnalyticsApplication;
 import com.example.avjindersinghsekhon.minimaltodo.AppDefault.AppDefaultFragment;
@@ -45,7 +49,13 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Set;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -58,6 +68,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
     private EditText mToDoTextBodyEditText;
     private EditText mToDoTextBodyDescription;
+    private Spinner mTodoSpinnerType;
 
     private SwitchCompat mToDoDateSwitch;
     //    private TextView mLastSeenTextView;
@@ -74,6 +85,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     private Button mChooseDateButton;
     private Button mChooseTimeButton;
     private Button attach;
+    private Button mCopyClipboard;
 
     private ToDoItem mUserToDoItem;
     private FloatingActionButton mToDoSendFloatingActionButton;
@@ -83,6 +95,8 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
     private String mUserEnteredText;
     private String mUserEnteredDescription;
+    private String mUserImportance;
+    private String mUserType;
     private boolean mUserHasReminder;
     private Toolbar mToolbar;
     private Date mUserReminderDate;
@@ -95,6 +109,14 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     private static final int PICKFILE_RESULT_CODE = 1;
 //    TextView textFile;
     AnalyticsApplication app;
+
+    private ArrayList<String> types = new ArrayList<>();
+    {
+        types.add("no type");
+        types.add("work");
+        types.add("university");
+        types.add("recreation");
+    }
 
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
@@ -137,6 +159,8 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
         mUserEnteredText = mUserToDoItem.getToDoText();
         mUserEnteredDescription = mUserToDoItem.getmToDoDescription();
+        mUserImportance = mUserToDoItem.getImportance();
+        mUserType = mUserToDoItem.getType();
         mUserHasReminder = mUserToDoItem.hasReminder();
         mUserReminderDate = mUserToDoItem.getToDoDate();
         mUserColor = mUserToDoItem.getTodoColor();
@@ -166,11 +190,14 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         mUserDateSpinnerContainingLinearLayout = (LinearLayout) view.findViewById(R.id.toDoEnterDateLinearLayout);
         mToDoTextBodyEditText = (EditText) view.findViewById(R.id.userToDoEditText);
         mToDoTextBodyDescription= (EditText) view.findViewById(R.id.userToDoDescription);
+        mTodoSpinnerType= (Spinner) view.findViewById(R.id.spinner);
         mToDoDateSwitch = (SwitchCompat) view.findViewById(R.id.toDoHasDateSwitchCompat);
 //        mLastSeenTextView = (TextView)findViewById(R.id.toDoLastEditedTextView);
         mToDoSendFloatingActionButton = (FloatingActionButton) view.findViewById(R.id.makeToDoFloatingActionButton);
         mReminderTextView = (TextView) view.findViewById(R.id.newToDoDateTimeReminderTextView);
 
+        //add spinner type
+        setSpinner(view);
 
         //OnClickListener for CopyClipboard Button
         attach.setOnClickListener(new View.OnClickListener() {
@@ -226,6 +253,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         mToDoTextBodyEditText.requestFocus();
         mToDoTextBodyEditText.setText(mUserEnteredText);
         mToDoTextBodyDescription.setText(mUserEnteredDescription);
+        setSpinText(mTodoSpinnerType, mUserType);
         InputMethodManager imm = (InputMethodManager) this.getActivity().getSystemService(INPUT_METHOD_SERVICE);
 //        imm.showSoftInput(mToDoTextBodyEditText, InputMethodManager.SHOW_IMPLICIT);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
@@ -269,6 +297,19 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 //        mLastSeenTextView.setText(String.format(getResources().getString(R.string.last_edited), lastSeen));
 
         setEnterDateLayoutVisible(mToDoDateSwitch.isChecked());
+
+        mTodoSpinnerType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                mUserType = mTodoSpinnerType.getSelectedItem().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
 
         mToDoDateSwitch.setChecked(mUserHasReminder && (mUserReminderDate != null));
         mToDoDateSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -436,9 +477,30 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 //            }
 //        });
 
+    }
+
+    private void setSpinText(Spinner spin, String text)
+    {
+        for(int i= 0; i < spin.getAdapter().getCount(); i++)
+        {
+            if(spin.getAdapter().getItem(i).toString().contains(text))
+            {
+                spin.setSelection(i);
+            }
+        }
 
     }
 
+    private void addType(String type){
+        this.types.add(type);
+    }
+
+    private void setSpinner(View view) {
+        Spinner spin = (Spinner) view.findViewById(R.id.spinner);
+        ArrayAdapter aa = new ArrayAdapter<>(getContext(),R.layout.spinner_item,this.types);
+        aa.setDropDownViewResource(R.layout.spinner_item);
+        spin.setAdapter(aa);
+    }
 
     private void setDateAndTimeEditText() {
 
@@ -633,9 +695,46 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         }
         mUserToDoItem.setHasReminder(mUserHasReminder);
         mUserToDoItem.setToDoDate(mUserReminderDate);
-        mUserToDoItem.setTodoColor(mUserColor);
+        mUserToDoItem.setTodoColor(getColorByType());
+        mUserToDoItem.setImportance(mUserImportance);
+        mUserToDoItem.setType(mUserType);
         i.putExtra(MainFragment.TODOITEM, mUserToDoItem);
         getActivity().setResult(result, i);
+    }
+
+    private HashMap<String, Integer[]> color_by_type = new HashMap<>();
+    {
+        color_by_type.put("no type", new Integer[]{Color.rgb(204, 204, 204),
+                Color.rgb(153, 153, 153),
+                Color.rgb(102, 102, 102),
+                Color.rgb(51, 51, 51)});
+        color_by_type.put("work", new Integer[]{Color.rgb(255, 102, 102),
+                Color.rgb(255, 0, 0),
+                Color.rgb(204, 0, 0),
+                Color.rgb(153, 0, 0)});
+        color_by_type.put("university", new Integer[]{Color.rgb(102, 255, 102),
+                Color.rgb(0, 204, 0),
+                Color.rgb(0, 153, 0),
+                Color.rgb(0, 102, 0)});
+        color_by_type.put("recreation", new Integer[]{Color.rgb(51, 204, 255),
+                Color.rgb(51, 153, 255),
+                Color.rgb(0, 0, 204),
+                Color.rgb(0, 0, 153)});
+        color_by_type.put("default", new Integer[]{Color.rgb(255, 255, 204),
+                Color.rgb(255, 255, 153),
+                Color.rgb(255, 255, 0),
+                Color.rgb(255, 204, 0)});
+    }
+
+    private int getColorByType(){
+        if (mUserImportance.equals("")){
+            try {
+                return color_by_type.get(mUserType)[0];
+            } catch (Exception e){
+                return color_by_type.get("default")[0];
+            }
+        }
+        return 0;
     }
 
 

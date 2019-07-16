@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -85,6 +86,7 @@ public class MainFragment extends AppDefaultFragment {
             "Get car washed",
             "Get my dry cleaning"
     };
+    private ArrayList<ToDoItem> adapterData;
 
 
     @Override
@@ -114,7 +116,8 @@ public class MainFragment extends AppDefaultFragment {
 
         storeRetrieveData = new StoreRetrieveData(getContext(), FILENAME);
         mToDoItemsArrayList = getLocallyStoredData(storeRetrieveData);
-        adapter = new MainFragment.BasicListAdapter(mToDoItemsArrayList);
+        adapterData = (ArrayList<ToDoItem>) mToDoItemsArrayList.clone();
+        adapter = new MainFragment.BasicListAdapter(adapterData);
         setAlarms();
 
 
@@ -148,9 +151,7 @@ public class MainFragment extends AppDefaultFragment {
             public void onClick(View v) {
                 app.send(this, "Action", "FAB pressed");
                 Intent newTodo = new Intent(getContext(), AddToDoActivity.class);
-                ToDoItem item = new ToDoItem("","", false, null);
-                int color = ColorGenerator.MATERIAL.getRandomColor();
-                item.setTodoColor(color);
+                ToDoItem item = new ToDoItem("","", "no type", "", false, null);
                 //noinspection ResourceType
 //                String color = getResources().getString(R.color.primary_ligher);
                 newTodo.putExtra(TODOITEM, item);
@@ -217,8 +218,14 @@ public class MainFragment extends AppDefaultFragment {
 
 
         mRecyclerView.setAdapter(adapter);
-//        setUpTransitions();
 
+        Button filter_button = (Button) view.findViewById(R.id.filter_button);
+        filter_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adapter.notifyDataSetChanged();
+            }
+        });
 
     }
 
@@ -279,9 +286,10 @@ public class MainFragment extends AppDefaultFragment {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREF_DATA_SET_CHANGED, MODE_PRIVATE);
         if (sharedPreferences.getBoolean(CHANGE_OCCURED, false)) {
 
+            storeRetrieveData = new StoreRetrieveData(getContext(), FILENAME);
             mToDoItemsArrayList = getLocallyStoredData(storeRetrieveData);
-            adapter = new MainFragment.BasicListAdapter(mToDoItemsArrayList);
-            mRecyclerView.setAdapter(adapter);
+            adapterData = (ArrayList<ToDoItem>) mToDoItemsArrayList.clone();
+            adapter = new MainFragment.BasicListAdapter(adapterData);
             setAlarms();
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -417,14 +425,15 @@ public class MainFragment extends AppDefaultFragment {
 
     private void addToDataStore(ToDoItem item) {
         mToDoItemsArrayList.add(item);
-        adapter.notifyItemInserted(mToDoItemsArrayList.size() - 1);
+        adapterData.add(item);
+        adapter.notifyDataSetChanged();
 
     }
 
 
     public void makeUpItems(ArrayList<ToDoItem> items, int len) {
         for (String testString : testStrings) {
-            ToDoItem item = new ToDoItem(testString,testString, false, new Date());
+            ToDoItem item = new ToDoItem(testString,testString, "", "", false, new Date());//TODO bug
             //noinspection ResourceType
 //            item.setTodoColor(getResources().getString(R.color.red_secondary));
             items.add(item);
