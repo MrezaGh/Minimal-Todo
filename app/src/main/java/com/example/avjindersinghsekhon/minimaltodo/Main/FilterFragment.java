@@ -103,6 +103,6 @@ public class FilterFragment extends AppDefaultFragment {
 
     @Override
     protected int layoutRes() {
-        return R.layout.fragment_filter;
+        return R.layout.fragment_main;
     }
 }
