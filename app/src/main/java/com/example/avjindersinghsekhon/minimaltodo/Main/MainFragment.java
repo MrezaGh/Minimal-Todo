@@ -1,6 +1,7 @@
 package com.example.avjindersinghsekhon.minimaltodo.Main;
 
 import android.app.AlarmManager;
+import android.app.Fragment;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +13,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,12 +28,12 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
+import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
-import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.example.avjindersinghsekhon.minimaltodo.About.AboutActivity;
 import com.example.avjindersinghsekhon.minimaltodo.AddToDo.AddToDoActivity;
 import com.example.avjindersinghsekhon.minimaltodo.AddToDo.AddToDoFragment;
@@ -61,10 +64,13 @@ public class MainFragment extends AppDefaultFragment {
     public static ArrayList<ToDoItem> mToDoItemsArrayList;
     private RecyclerViewEmptySupport mRecyclerView;
     private FloatingActionButton mAddToDoItemFAB;
+    private LinearLayout buttons_layout;
     private CoordinatorLayout mCoordLayout;
     public static final String TODOITEM = "com.avjindersinghsekhon.com.avjindersinghsekhon.minimaltodo.MainActivity";
     private MainFragment.BasicListAdapter adapter;
     private static final int REQUEST_ID_TODO_ITEM = 100;
+    private static final int REQUEST_ID_FILTER = 200;
+    private static final int REQUEST_ID_SORT = 300;
     private ToDoItem mJustDeletedToDoItem;
     private int mIndexOfDeletedToDoItem;
     public static final String DATE_TIME_FORMAT_12_HOUR = "MMM d, yyyy  h:mm a";
@@ -121,6 +127,9 @@ public class MainFragment extends AppDefaultFragment {
         adapterData = (ArrayList<ToDoItem>) mToDoItemsArrayList.clone();
         adapter = new MainFragment.BasicListAdapter(adapterData);
         setAlarms();
+
+        buttons_layout = (LinearLayout) view.findViewById(R.id.buttons);
+
 
 
 //        adapter.notifyDataSetChanged();
@@ -224,7 +233,10 @@ public class MainFragment extends AppDefaultFragment {
         filter_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adapter.notifyDataSetChanged();
+                FilterFragment fragment = new FilterFragment();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, fragment).addToBackStack(this.toString());
+                transaction.commit();
             }
         });
 
@@ -250,6 +262,13 @@ public class MainFragment extends AppDefaultFragment {
     @Override
     public void onResume() {
         super.onResume();
+        if (mToDoItemsArrayList.size() == 0){
+            buttons_layout.setVisibility(View.INVISIBLE);
+        }
+        else {
+            buttons_layout.setVisibility(View.VISIBLE);
+        }
+
         app.send(this);
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREF_DATA_SET_CHANGED, MODE_PRIVATE);
@@ -386,6 +405,7 @@ public class MainFragment extends AppDefaultFragment {
             for (int i = 0; i < mToDoItemsArrayList.size(); i++) {
                 if (item.getIdentifier().equals(mToDoItemsArrayList.get(i).getIdentifier())) {
                     mToDoItemsArrayList.set(i, item);
+                    adapterData.set(i, item);//TODO
                     existed = true;
                     adapter.notifyDataSetChanged();
                     break;
@@ -465,6 +485,10 @@ public class MainFragment extends AppDefaultFragment {
             app.send(this, "Action", "Swiped Todo Away");
 
             mJustDeletedToDoItem = items.remove(position);
+
+            final int index = getIndex(mJustDeletedToDoItem);
+            mToDoItemsArrayList.remove(index);
+
             mIndexOfDeletedToDoItem = position;
             Intent i = new Intent(getContext(), TodoNotificationService.class);
             deleteAlarm(i, mJustDeletedToDoItem.getIdentifier().hashCode());
@@ -480,6 +504,7 @@ public class MainFragment extends AppDefaultFragment {
                             //Comment the line below if not using Google Analytics
                             app.send(this, "Action", "UNDO Pressed");
                             items.add(mIndexOfDeletedToDoItem, mJustDeletedToDoItem);
+                            mToDoItemsArrayList.add(index, mJustDeletedToDoItem);
                             if (mJustDeletedToDoItem.getToDoDate() != null && mJustDeletedToDoItem.hasReminder()) {
                                 Intent i = new Intent(getContext(), TodoNotificationService.class);
                                 i.putExtra(TodoNotificationService.TODOTEXT, mJustDeletedToDoItem.getToDoText());
@@ -489,6 +514,14 @@ public class MainFragment extends AppDefaultFragment {
                             notifyItemInserted(mIndexOfDeletedToDoItem);
                         }
                     }).show();
+        }
+
+        private int getIndex(ToDoItem mJustDeletedToDoItem) {
+            for (int i = 0; i < mToDoItemsArrayList.size(); i++) {
+                if (mToDoItemsArrayList.get(i).getIdentifier().equals(mJustDeletedToDoItem.getIdentifier()))
+                    return i;
+            }
+            return -1;
         }
 
         @Override
