@@ -27,6 +27,8 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.content.ClipboardManager;
 import android.widget.Toast;
@@ -71,7 +73,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
     private Button mChooseDateButton;
     private Button mChooseTimeButton;
-    private Button mCopyClipboard;
+    private Button attach;
 
     private ToDoItem mUserToDoItem;
     private FloatingActionButton mToDoSendFloatingActionButton;
@@ -89,10 +91,13 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     private boolean setTimeButtonClickedOnce = false;
     private LinearLayout mContainerLayout;
     private String theme;
+    private RadioGroup radioImportanceGroup;
+    private static final int PICKFILE_RESULT_CODE = 1;
+//    TextView textFile;
     AnalyticsApplication app;
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         app = (AnalyticsApplication) getActivity().getApplication();
 //        setContentView(R.layout.new_to_do_layout);
@@ -155,7 +160,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
 
         //Button for Copy to Clipboard
-        mCopyClipboard = (Button) view.findViewById(R.id.copyclipboard);
+        attach = (Button) view.findViewById(R.id.attach);
 
         mContainerLayout = (LinearLayout) view.findViewById(R.id.todoReminderAndDateContainerLayout);
         mUserDateSpinnerContainingLinearLayout = (LinearLayout) view.findViewById(R.id.toDoEnterDateLinearLayout);
@@ -168,16 +173,27 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
 
         //OnClickListener for CopyClipboard Button
-        mCopyClipboard.setOnClickListener(new View.OnClickListener() {
+        attach.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String toDoTextContainer = mToDoTextBodyEditText.getText().toString();
-                String toDoTextBodyDescriptionContainer = mToDoTextBodyDescription.getText().toString();
-                ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                CombinationText = "Title : " + toDoTextContainer + "\nDescription : " + toDoTextBodyDescriptionContainer + "\n -Copied From MinimalToDo";
-                ClipData clip = ClipData.newPlainText("text", CombinationText);
-                clipboard.setPrimaryClip(clip);
-                Toast.makeText(getContext(), "Copied To Clipboard!", Toast.LENGTH_SHORT).show();
+
+                // TODO Auto-generated method stub
+
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("file/*");
+                startActivityForResult(intent,PICKFILE_RESULT_CODE);
+            }
+            protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+                // TODO Auto-generated method stub
+                switch (requestCode) {
+                    case PICKFILE_RESULT_CODE:
+                        if (resultCode == RESULT_OK) {
+                            String FilePath = data.getData().getPath();
+//                            textFile.setText(FilePath);
+                        }
+                        break;
+
+                }
             }
         });
 
@@ -290,6 +306,14 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                     makeResult(RESULT_OK);
                     getActivity().finish();
                 }
+                radioImportanceGroup = (RadioGroup) view.findViewById(R.id.radioImportance);
+                int selectedId = radioImportanceGroup.getCheckedRadioButtonId();
+                RadioButton radioImportanceButton = (RadioButton) view.findViewById(selectedId);
+
+//                Toast.makeText(getContext(),
+//                        radioImportanceButton.getText(), Toast.LENGTH_SHORT).show();
+
+                //ToDo the selected radio button should be saved some where
                 hideKeyboard(mToDoTextBodyEditText);
                 hideKeyboard(mToDoTextBodyDescription);
             }
@@ -412,7 +436,9 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 //            }
 //        });
 
+
     }
+
 
     private void setDateAndTimeEditText() {
 
