@@ -15,6 +15,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -58,6 +59,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class MainFragment extends AppDefaultFragment {
     private RecyclerViewEmptySupport mRecyclerView;
     private FloatingActionButton mAddToDoItemFAB;
+    private LinearLayout buttons_layout;
     private ArrayList<ToDoItem> mToDoItemsArrayList;
     private CoordinatorLayout mCoordLayout;
     public static final String TODOITEM = "com.avjindersinghsekhon.com.avjindersinghsekhon.minimaltodo.MainActivity";
@@ -119,6 +121,9 @@ public class MainFragment extends AppDefaultFragment {
         adapterData = (ArrayList<ToDoItem>) mToDoItemsArrayList.clone();
         adapter = new MainFragment.BasicListAdapter(adapterData);
         setAlarms();
+
+        buttons_layout = (LinearLayout) view.findViewById(R.id.buttons);
+
 
 
 //        adapter.notifyDataSetChanged();
@@ -223,7 +228,9 @@ public class MainFragment extends AppDefaultFragment {
         filter_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adapter.notifyDataSetChanged();
+//                Intent i = new Intent(getContext(), AddToDoActivity.class);
+//                i.putExtra(TODOITEM, 0);
+//                startActivityForResult(i, REQUEST_ID_TODO_ITEM);
             }
         });
 
@@ -249,6 +256,13 @@ public class MainFragment extends AppDefaultFragment {
     @Override
     public void onResume() {
         super.onResume();
+        if (mToDoItemsArrayList.size() == 0){
+            buttons_layout.setVisibility(View.INVISIBLE);
+        }
+        else {
+            buttons_layout.setVisibility(View.VISIBLE);
+        }
+
         app.send(this);
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREF_DATA_SET_CHANGED, MODE_PRIVATE);
