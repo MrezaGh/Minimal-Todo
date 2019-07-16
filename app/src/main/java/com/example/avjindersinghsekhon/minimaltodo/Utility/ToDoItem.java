@@ -16,23 +16,29 @@ public class ToDoItem implements Serializable {
     private int mTodoColor;
     private Date mToDoDate;
     private UUID mTodoIdentifier;
+    private String importance;//////////
+    private String type;//////////
     //add description
     private static final String TODODESCRIPTION = "tododescription";
     private static final String TODOTEXT = "todotext";
     private static final String TODOREMINDER = "todoreminder";
     //    private static final String TODOLASTEDITED = "todolastedited";
     private static final String TODOCOLOR = "todocolor";
+    private static final String TYPE = "type";
+    private static final String IMPORTANCE = "import";
     private static final String TODODATE = "tododate";
     private static final String TODOIDENTIFIER = "todoidentifier";
 
 
-    public ToDoItem(String todoBody,String tododescription,  boolean hasReminder, Date toDoDate) {
+    public ToDoItem(String todoBody,String tododescription, String type, String importance, boolean hasReminder, Date toDoDate) {
         mToDoText = todoBody;
         mHasReminder = hasReminder;
         mToDoDate = toDoDate;
         mToDoDescription = tododescription;
         mTodoColor = 1677725;
         mTodoIdentifier = UUID.randomUUID();
+        this.importance = importance;
+        this.type = type;
     }
 
     public ToDoItem(JSONObject jsonObject) throws JSONException {
@@ -40,6 +46,8 @@ public class ToDoItem implements Serializable {
         mToDoDescription = jsonObject.getString(TODODESCRIPTION);
         mHasReminder = jsonObject.getBoolean(TODOREMINDER);
         mTodoColor = jsonObject.getInt(TODOCOLOR);
+        type = jsonObject.getString(TYPE);
+        importance = jsonObject.getString(IMPORTANCE);
 
         mTodoIdentifier = UUID.fromString(jsonObject.getString(TODOIDENTIFIER));
 
@@ -54,6 +62,8 @@ public class ToDoItem implements Serializable {
     public JSONObject toJSON() throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(TODOTEXT, mToDoText);
+        jsonObject.put(TYPE, type);
+        jsonObject.put(IMPORTANCE, importance);
         jsonObject.put(TODOREMINDER, mHasReminder);
         jsonObject.put(TODODESCRIPTION, mToDoDescription);
 //        jsonObject.put(TODOLASTEDITED, mLastEdited.getTime());
@@ -68,7 +78,7 @@ public class ToDoItem implements Serializable {
 
 
     public ToDoItem() {
-        this("Clean my room","Sweep and Mop my Room", true, new Date());
+        this("Clean my room","Sweep and Mop my Room", "no type", "very important", true, new Date());
     }
 
     public String getmToDoDescription() { return mToDoDescription;}
@@ -110,6 +120,22 @@ public class ToDoItem implements Serializable {
 
     public UUID getIdentifier() {
         return mTodoIdentifier;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getImportance() {
+        return importance;
+    }
+
+    public void setImportance(String importance) {
+        this.importance = importance;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
 

@@ -80,19 +80,31 @@
 
             </com.example.avjindersinghsekhon.minimaltodo.Utility.CustomTextInputLayout>
 
+
             <LinearLayout
                 android:id="@+id/todoReminderAndDateContainerLayout"
                 android:layout_width="match_parent"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="32dp"
                 android:layout_height="0dp"
                 android:layout_weight="1.5"
                 android:orientation="vertical">
 
 
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="149dp"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_marginLeft="36dp"
-                    android:layout_marginRight="36dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
                     android:layout_marginTop="30dp"
                     android:layout_weight=".5"
                     android:gravity="center"

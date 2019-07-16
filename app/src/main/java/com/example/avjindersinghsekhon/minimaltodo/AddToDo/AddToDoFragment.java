@@ -27,9 +27,13 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.content.ClipboardManager;
 import android.widget.Toast;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.example.avjindersinghsekhon.minimaltodo.Analytics.AnalyticsApplication;
 import com.example.avjindersinghsekhon.minimaltodo.AppDefault.AppDefaultFragment;
@@ -41,9 +45,13 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -56,6 +64,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
     private EditText mToDoTextBodyEditText;
     private EditText mToDoTextBodyDescription;
+    private Spinner mTodoSpinnerType;
 
     private SwitchCompat mToDoDateSwitch;
     //    private TextView mLastSeenTextView;
@@ -73,6 +82,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     private Button mChooseTimeButton;
     private Button mCopyClipboard;
 
+
     private ToDoItem mUserToDoItem;
     private FloatingActionButton mToDoSendFloatingActionButton;
     public static final String DATE_FORMAT = "MMM d, yyyy";
@@ -81,6 +91,8 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
     private String mUserEnteredText;
     private String mUserEnteredDescription;
+    private String mUserImportance;
+    private String mUserType;
     private boolean mUserHasReminder;
     private Toolbar mToolbar;
     private Date mUserReminderDate;
@@ -90,6 +102,14 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     private LinearLayout mContainerLayout;
     private String theme;
     AnalyticsApplication app;
+
+    private ArrayList<String> types = new ArrayList<>();
+    {
+        types.add("no type");
+        types.add("work");
+        types.add("university");
+        types.add("recreation");
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -132,6 +152,8 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
         mUserEnteredText = mUserToDoItem.getToDoText();
         mUserEnteredDescription = mUserToDoItem.getmToDoDescription();
+        mUserImportance = mUserToDoItem.getImportance();
+        mUserType = mUserToDoItem.getType();
         mUserHasReminder = mUserToDoItem.hasReminder();
         mUserReminderDate = mUserToDoItem.getToDoDate();
         mUserColor = mUserToDoItem.getTodoColor();
@@ -161,17 +183,21 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         mUserDateSpinnerContainingLinearLayout = (LinearLayout) view.findViewById(R.id.toDoEnterDateLinearLayout);
         mToDoTextBodyEditText = (EditText) view.findViewById(R.id.userToDoEditText);
         mToDoTextBodyDescription= (EditText) view.findViewById(R.id.userToDoDescription);
+        mTodoSpinnerType= (Spinner) view.findViewById(R.id.spinner);
         mToDoDateSwitch = (SwitchCompat) view.findViewById(R.id.toDoHasDateSwitchCompat);
 //        mLastSeenTextView = (TextView)findViewById(R.id.toDoLastEditedTextView);
         mToDoSendFloatingActionButton = (FloatingActionButton) view.findViewById(R.id.makeToDoFloatingActionButton);
         mReminderTextView = (TextView) view.findViewById(R.id.newToDoDateTimeReminderTextView);
 
+        //add spinner type
+        setSpinner(view);
 
         //OnClickListener for CopyClipboard Button
         mCopyClipboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String toDoTextContainer = mToDoTextBodyEditText.getText().toString();
+                String toDoType = mTodoSpinnerType.getSelectedItem().toString();
                 String toDoTextBodyDescriptionContainer = mToDoTextBodyDescription.getText().toString();
                 ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                 CombinationText = "Title : " + toDoTextContainer + "\nDescription : " + toDoTextBodyDescriptionContainer + "\n -Copied From MinimalToDo";
@@ -210,6 +236,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         mToDoTextBodyEditText.requestFocus();
         mToDoTextBodyEditText.setText(mUserEnteredText);
         mToDoTextBodyDescription.setText(mUserEnteredDescription);
+        setSpinText(mTodoSpinnerType, mUserType);
         InputMethodManager imm = (InputMethodManager) this.getActivity().getSystemService(INPUT_METHOD_SERVICE);
 //        imm.showSoftInput(mToDoTextBodyEditText, InputMethodManager.SHOW_IMPLICIT);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
@@ -253,6 +280,19 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 //        mLastSeenTextView.setText(String.format(getResources().getString(R.string.last_edited), lastSeen));
 
         setEnterDateLayoutVisible(mToDoDateSwitch.isChecked());
+
+        mTodoSpinnerType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                mUserType = mTodoSpinnerType.getSelectedItem().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
 
         mToDoDateSwitch.setChecked(mUserHasReminder && (mUserReminderDate != null));
         mToDoDateSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -412,6 +452,29 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 //            }
 //        });
 
+    }
+
+    private void setSpinText(Spinner spin, String text)
+    {
+        for(int i= 0; i < spin.getAdapter().getCount(); i++)
+        {
+            if(spin.getAdapter().getItem(i).toString().contains(text))
+            {
+                spin.setSelection(i);
+            }
+        }
+
+    }
+
+    private void addType(String type){
+        this.types.add(type);
+    }
+
+    private void setSpinner(View view) {
+        Spinner spin = (Spinner) view.findViewById(R.id.spinner);
+        ArrayAdapter aa = new ArrayAdapter<>(getContext(),android.R.layout.simple_spinner_item,this.types);
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spin.setAdapter(aa);
     }
 
     private void setDateAndTimeEditText() {
@@ -608,6 +671,8 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         mUserToDoItem.setHasReminder(mUserHasReminder);
         mUserToDoItem.setToDoDate(mUserReminderDate);
         mUserToDoItem.setTodoColor(mUserColor);
+        mUserToDoItem.setImportance(mUserImportance);
+        mUserToDoItem.setType(mUserType);
         i.putExtra(MainFragment.TODOITEM, mUserToDoItem);
         getActivity().setResult(result, i);
     }
