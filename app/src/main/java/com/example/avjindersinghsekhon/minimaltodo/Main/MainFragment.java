@@ -92,7 +92,7 @@ public class MainFragment extends AppDefaultFragment {
     private Button changeLanguageToFr;
     private Button changeLanguageToEn;
 
-    private String mLanguageCode = "fr";
+    private String mLanguageCode = "bg";
     private String mLanguageCode2 = "en";
 
     @Override
