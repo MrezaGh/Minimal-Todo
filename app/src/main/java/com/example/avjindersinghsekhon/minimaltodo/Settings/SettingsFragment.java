@@ -1,19 +1,28 @@
 package com.example.avjindersinghsekhon.minimaltodo.Settings;
 
+import android.annotation.TargetApi;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.nfc.Tag;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.PreferenceFragment;
 
+import com.example.avjindersinghsekhon.minimaltodo.AddToDo.AddToDoActivity;
 import com.example.avjindersinghsekhon.minimaltodo.Analytics.AnalyticsApplication;
 import com.example.avjindersinghsekhon.minimaltodo.Main.MainFragment;
 import com.example.avjindersinghsekhon.minimaltodo.R;
+import com.example.avjindersinghsekhon.minimaltodo.Utility.LocaleHelper;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.PreferenceKeys;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     AnalyticsApplication app;
-
+    private static final String TAG = "SettingFragment";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -22,6 +31,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         app = (AnalyticsApplication) getActivity().getApplication();
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         PreferenceKeys preferenceKeys = new PreferenceKeys(getResources());
@@ -42,6 +52,40 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             themeEditor.apply();
 
             getActivity().recreate();
+        }else if(key.equals(preferenceKeys.language_pref_key)){
+            String mLanguageCode;
+            CheckBoxPreference checkBoxPreference = (CheckBoxPreference) findPreference(preferenceKeys.language_pref_key);
+            if (checkBoxPreference.isChecked()) {
+                mLanguageCode="fa";
+                //Comment out this line if not using Google Analytics
+                LocaleHelper.setLocale(getContext(), mLanguageCode);
+                //It is required to recreate the activity to reflect the change in UI.
+
+//                Fragment frg = null;
+//                frg = getFragmentManager().findFragmentByTag(TAG);
+//                final FragmentTransaction ft = getFragmentManager().beginTransaction();
+//                ft.detach(frg);
+//                ft.attach(frg);
+//                ft.commit();
+                  getActivity().finish();
+                  getActivity().recreate();
+
+            } else {
+                mLanguageCode="en";
+                //Comment out this line if not using Google Analytics
+                LocaleHelper.setLocale(getContext(), mLanguageCode);
+                //It is required to recreate the activity to reflect the change in UI.
+
+//                Fragment frg = null;
+//                frg = getFragmentManager().findFragmentByTag(TAG);
+//                final FragmentTransaction ft = getFragmentManager().beginTransaction();
+//                ft.detach(frg);
+//                ft.attach(frg);
+//                ft.commit();
+                getActivity().finish();
+                getActivity().recreate();
+            }
+
         }
     }
 

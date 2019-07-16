@@ -75,16 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:orientation="horizontal">
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/change_language_to_fr"
-                android:text="french"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/change_language_to_en"
-                android:text="english"/>
+
             <Button
                 android:id="@+id/filter_button"
                 android:layout_width="wrap_content"

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Minimal</string>
+    <string name="action_settings">تنظیمات</string>
+    <string name="no_to_dos">شما هیچ برنامه ای ندارید</string>
+    <string name="title">موضوع</string>
+    <string name="remind_me">یاداوری کن</string>
+    <string name="choose_date">تاریخ</string>
+    <string name="choose_time">زمان</string>
+    <string name="remind_date_and_time">یاداوری کن در %1$s, %2$s %3$s</string>
+    <string name="about">درباره ما</string>
+    <string name="app_version">ورژن: %1$s</string>
+    <string name="contact_me">میتوانی با من در ارتباط باشی</string>
+    <string name="made_by">تولید شده توسط Avjinder</string>
+    <string name="done_label">انجام شد</string>
+    <string name="date_reminder_default" translatable="false">امروز</string>
+    <string name="date_error_check_again" translatable="false">تاریخی که وارد کردید گذشته است.</string>
+    <string name="night_mode" translatable="false">حالت شب</string>
+    <string name="night_mode_on_summary" translatable="false">حالت شب روشن است</string>
+    <string name="night_mode_off_summary" translatable="false">حالت شب خاموش است</string>
+    <string name="description" translatable="false">توصیف</string>
+
+    <string-array name="snooze_options">
+        <item>10 دقیقه</item>
+        <item>30 دقیقه</item>
+        <item>1 ساعت</item>
+    </string-array>
+
+    <string name="snooze">Snooze</string>
+    <string name="remove">Remove</string>
+    <string name="todo_error" translatable="false">لطفا یک برنامه وارد کنید.</string>
+    <string name="very_important" translatable="false">خیلی مهم</string>
+    <string name="important" translatable="false">مهم</string>
+    <string name="less_important" translatable="false">کم اهمیت</string>
+    <string name="not_important" translatable="false">بی اهمیت</string>
+    <string name="Language">زبان</string>
+    <string name="Persian">فارسی</string>
+    <string name="English">انگیلیسی</string>
+    <string name="language_pref_key">LanguagePreference</string>
+</resources>

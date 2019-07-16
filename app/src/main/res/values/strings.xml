@@ -33,4 +33,8 @@
     <string name="important" translatable="false">important</string>
     <string name="less_important" translatable="false">less important</string>
     <string name="not_important" translatable="false">not important</string>
+    <string name="Language">Language</string>
+    <string name="Persian">Persian</string>
+    <string name="English">English</string>
+    <string name="language_pref_key">LanguagePreference</string>
 </resources>

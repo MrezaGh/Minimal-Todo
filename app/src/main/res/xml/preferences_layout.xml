@@ -7,4 +7,11 @@
             android:defaultValue="false"
             android:key="@string/night_mode_pref_key"
             />
+        <CheckBoxPreference
+            android:title="@string/Language"
+            android:summaryOn="@string/Persian"
+            android:summaryOff="@string/English"
+            android:defaultValue="false"
+            android:key="@string/language_pref_key"
+            />
 </PreferenceScreen>
