@@ -13,12 +13,12 @@
     <string name="contact_me">You can contact me at</string>
     <string name="made_by">Made by Avjinder</string>
     <string name="done_label">Done</string>
-    <string name="date_reminder_default">Today</string>
-    <string name="date_error_check_again">The date you entered is in the past.</string>
-    <string name="night_mode">Night Mode</string>
-    <string name="night_mode_on_summary">Night mode is on</string>
-    <string name="night_mode_off_summary">Night mode is off</string>
-    <string name="description">Description</string>
+    <string name="date_reminder_default" translatable="false">Today</string>
+    <string name="date_error_check_again" translatable="false">The date you entered is in the past.</string>
+    <string name="night_mode" translatable="false">Night Mode</string>
+    <string name="night_mode_on_summary" translatable="false">Night mode is on</string>
+    <string name="night_mode_off_summary" translatable="false">Night mode is off</string>
+    <string name="description" translatable="false">Description</string>
 
     <string-array name="snooze_options">
         <item>10 Minutes</item>
@@ -28,5 +28,9 @@
 
     <string name="snooze">Snooze</string>
     <string name="remove">Remove</string>
-    <string name="todo_error">Please enter a Todo</string>
+    <string name="todo_error" translatable="false">Please enter a Todo</string>
+    <string name="very_important" translatable="false">very important</string>
+    <string name="important" translatable="false">important</string>
+    <string name="less_important" translatable="false">less important</string>
+    <string name="not_important" translatable="false">not important</string>
 </resources>

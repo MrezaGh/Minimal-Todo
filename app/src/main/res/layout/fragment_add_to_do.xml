@@ -131,12 +131,12 @@
                         android:padding="8dp" />
 
                     <Button
-                        android:id="@+id/copyclipboard"
-                        android:layout_width="0dp"
+                        android:id="@+id/attach"
+                        android:layout_width="15dp"
                         android:layout_height="28dp"
                         android:layout_margin="8dp"
                         android:layout_weight=".37"
-                        android:background="@drawable/ic_content_copy_black_24dp"
+                        android:background="@drawable/attach"
                         android:backgroundTint="@color/grey600"
                         android:padding="8dp"
                         android:visibility="visible" />
@@ -207,6 +207,38 @@
                         android:textSize="14sp" />
 
                 </LinearLayout>
+
+                <RadioGroup
+                    android:id="@+id/radioImportance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="36dp"
+                    android:layout_marginBottom="36dp">
+
+                    <RadioButton
+                        android:id="@+id/radioVeryImportant"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/very_important"
+                        android:checked="true" />
+
+                    <RadioButton
+                        android:id="@+id/radioImportant"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/important" />
+                    <RadioButton
+                        android:id="@+id/radioLessImportant"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/less_important" />
+                    <RadioButton
+                        android:id="@+id/radioNotImportant"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/not_important" />
+
+                </RadioGroup>
 
 
             </LinearLayout>
