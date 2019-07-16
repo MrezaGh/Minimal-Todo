@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -39,6 +40,7 @@ import com.example.avjindersinghsekhon.minimaltodo.R;
 import com.example.avjindersinghsekhon.minimaltodo.Reminder.ReminderFragment;
 import com.example.avjindersinghsekhon.minimaltodo.Settings.SettingsActivity;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ItemTouchHelperClass;
+import com.example.avjindersinghsekhon.minimaltodo.Utility.LocaleHelper;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.RecyclerViewEmptySupport;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.StoreRetrieveData;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ToDoItem;
@@ -87,7 +89,11 @@ public class MainFragment extends AppDefaultFragment {
             "Get my dry cleaning"
     };
     private ArrayList<ToDoItem> adapterData;
+    private Button changeLanguageToFr;
+    private Button changeLanguageToEn;
 
+    private String mLanguageCode = "fr";
+    private String mLanguageCode2 = "en";
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -143,7 +149,30 @@ public class MainFragment extends AppDefaultFragment {
 
         mCoordLayout = (CoordinatorLayout) view.findViewById(R.id.myCoordinatorLayout);
         mAddToDoItemFAB = (FloatingActionButton) view.findViewById(R.id.addToDoItemFAB);
+        changeLanguageToFr=(Button) view.findViewById(R.id.change_language_to_fr);
+        changeLanguageToFr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                LocaleHelper.setLocale(getContext(), mLanguageCode);
+                Resources a = getResources();
+                //It is required to recreate the activity to reflect the change in UI.
+                getActivity().recreate();
+
+            }
+        });
+        changeLanguageToEn=(Button) view.findViewById(R.id.change_language_to_en);
+        changeLanguageToEn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                LocaleHelper.setLocale(getContext(), mLanguageCode2);
+                Resources a = getResources();
+                //It is required to recreate the activity to reflect the change in UI.
+                getActivity().recreate();
+
+            }
+        });
         mAddToDoItemFAB.setOnClickListener(new View.OnClickListener() {
 
             @SuppressWarnings("deprecation")
