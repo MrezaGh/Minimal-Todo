@@ -58,7 +58,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             if (checkBoxPreference.isChecked()) {
                 mLanguageCode="fa";
                 //Comment out this line if not using Google Analytics
-                LocaleHelper.setLocale(getContext(), mLanguageCode);
+                LocaleHelper.setLocale(getActivity(), mLanguageCode);
                 //It is required to recreate the activity to reflect the change in UI.
 
 //                Fragment frg = null;
@@ -73,7 +73,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             } else {
                 mLanguageCode="en";
                 //Comment out this line if not using Google Analytics
-                LocaleHelper.setLocale(getContext(), mLanguageCode);
+                LocaleHelper.setLocale(getActivity(), mLanguageCode);
                 //It is required to recreate the activity to reflect the change in UI.
 
 //                Fragment frg = null;

@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -334,9 +335,12 @@ public class MainFragment extends AppDefaultFragment {
             buttons_layout.setVisibility(View.VISIBLE);
         }
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String l = sharedPreferences.getBoolean("LanguagePreference", false)? "fa" : "en";
+        LocaleHelper.setLocale(getActivity(), l);
         app.send(this);
 
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREF_DATA_SET_CHANGED, MODE_PRIVATE);
+        sharedPreferences = getActivity().getSharedPreferences(SHARED_PREF_DATA_SET_CHANGED, MODE_PRIVATE);
         if (sharedPreferences.getBoolean(ReminderFragment.EXIT, false)) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(ReminderFragment.EXIT, false);
