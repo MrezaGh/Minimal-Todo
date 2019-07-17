@@ -51,29 +51,44 @@ public class MainActivity extends AppDefaultActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         MenuItem warner = menu.findItem(R.id.menu_warner);
-        boolean danger = check_if_deadline_is_near();
-        if (danger)
-            warner.setIcon(R.drawable.warning_icon);
-        else
+        int pastNearSafe = check_if_deadline_is_near();// safe = 0, near = 1, past = 2
+        if (pastNearSafe == 0)
             warner.setIcon(R.drawable.done_icon);
+        else if(pastNearSafe == 1){
+            warner.setIcon(R.drawable.near_deadline_icon);
+        }
+        else if (pastNearSafe == 2){
+            warner.setIcon(R.drawable.warning_icon);
+        }
+
         return true;
     }
 
-    private boolean check_if_deadline_is_near() {
+    private int check_if_deadline_is_near() {
 
         boolean pastDeadline = false;
+        boolean nearDeadline = false;
+        Date currentTime = new Date();
         StoreRetrieveData storeRetrieveData = new StoreRetrieveData(this, "todoitems.json");
         ArrayList<ToDoItem> mToDoItemsArrayList = getLocallyStoredData(storeRetrieveData);
         for (ToDoItem item : mToDoItemsArrayList){
-            Log.i("item time: ", item.getToDoDate().toString());
-            Log.i("current time: ", new Date().toString());
-            Log.i("is it before: ", String.valueOf(item.getToDoDate().before(new Date())));
+//            Log.i("item time: ", item.getToDoDate().toString());
+//            Log.i("current time: ", currentTime.toString());
+//            Log.i("is it before: ", String.valueOf(item.getToDoDate().before(currentTime)));
             if (item.getToDoDate().before(new Date())){
                 pastDeadline = true;
             }
+            long hoursToDeadline = (item.getToDoDate().getTime() - currentTime.getTime())/(1000*60*60);
+            if (hoursToDeadline >= 0 && hoursToDeadline <= 2){
+                nearDeadline = true;
+            }
 
         }
-        return pastDeadline;
+        if (pastDeadline)
+            return 2;
+        if (nearDeadline)
+            return 1;
+        return 0;
     }
 
 
