@@ -37,4 +37,5 @@
     <string name="Persian">Persian</string>
     <string name="English">English</string>
     <string name="language_pref_key">LanguagePreference</string>
+    <string name="warn_me">warn me</string>
 </resources>

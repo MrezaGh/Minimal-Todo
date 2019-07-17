@@ -4,7 +4,12 @@
     tools:context=".AddToDo.AddToDoActivity">
 
 
-
+    <item
+        android:id="@+id/menu_warner"
+        android:orderInCategory="300"
+        android:title="warning"
+        android:icon="@drawable/warning_icon"
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/preferences"
