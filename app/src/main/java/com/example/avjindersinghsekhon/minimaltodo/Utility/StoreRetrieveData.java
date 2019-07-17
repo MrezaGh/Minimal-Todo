@@ -1,5 +1,6 @@
 package com.example.avjindersinghsekhon.minimaltodo.Utility;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v4.app.FragmentActivity;
@@ -40,8 +41,8 @@ public class StoreRetrieveData {
         return jsonArray;
     }
 
-    public static void saveFullFilter(FragmentActivity activity) {
-        SharedPreferences mPrefs = activity.getPreferences(MODE_PRIVATE);
+    public static void saveFullFilter(Context activity) {
+        SharedPreferences mPrefs = activity.getSharedPreferences("sf", MODE_PRIVATE);
         FilterConstraints filters = new FilterConstraints();
         filters.addAllImportanceConstraint();
         filters.addAllTypeConstraint();
@@ -53,8 +54,8 @@ public class StoreRetrieveData {
         prefsEditor.apply();
     }
 
-    public static void saveFilter(FragmentActivity activity, FilterConstraints filterConstraints) {
-        SharedPreferences mPrefs = activity.getPreferences(MODE_PRIVATE);
+    public static void saveFilter(Context activity, FilterConstraints filterConstraints) {
+        SharedPreferences mPrefs = activity.getSharedPreferences("sf", MODE_PRIVATE);
 
         SharedPreferences.Editor prefsEditor = mPrefs.edit();
         Gson gson = new Gson();
@@ -63,19 +64,20 @@ public class StoreRetrieveData {
         prefsEditor.apply();
     }
 
-    public static FilterConstraints getFilters(FragmentActivity activity){
-        SharedPreferences mPrefs = activity.getPreferences(MODE_PRIVATE);
+    public static FilterConstraints getFilters(Context activity){
+        SharedPreferences mPrefs = activity.getSharedPreferences("sf", MODE_PRIVATE);
+
         Gson gson = new Gson();
         String json = mPrefs.getString("filters", "");
         return gson.fromJson(json, FilterConstraints.class);
     }
 
 
-    public static void saveFullSort(FragmentActivity activity) {
-        SharedPreferences mPrefs = activity.getPreferences(MODE_PRIVATE);
+    public static void saveFullSort(Context activity) {
+        SharedPreferences mPrefs = activity.getSharedPreferences("sf", MODE_PRIVATE);
         SortConstraints sorts = new SortConstraints();
         sorts.setIncrease();
-        sorts.setSortByDate();
+        sorts.setSortByCreateDate();
 
         SharedPreferences.Editor prefsEditor = mPrefs.edit();
         Gson gson = new Gson();
@@ -84,8 +86,8 @@ public class StoreRetrieveData {
         prefsEditor.apply();
     }
 
-    public static void saveSort(FragmentActivity activity, SortConstraints sortConstraints) {
-        SharedPreferences mPrefs = activity.getPreferences(MODE_PRIVATE);
+    public static void saveSort(Context activity, SortConstraints sortConstraints) {
+        SharedPreferences mPrefs = activity.getSharedPreferences("sf", MODE_PRIVATE);
 
         SharedPreferences.Editor prefsEditor = mPrefs.edit();
         Gson gson = new Gson();
@@ -94,8 +96,8 @@ public class StoreRetrieveData {
         prefsEditor.apply();
     }
 
-    public static SortConstraints getSorts(FragmentActivity activity){
-        SharedPreferences mPrefs = activity.getPreferences(MODE_PRIVATE);
+    public static SortConstraints getSorts(Context activity){
+        SharedPreferences mPrefs = activity.getSharedPreferences("sf", MODE_PRIVATE);
         Gson gson = new Gson();
         String json = mPrefs.getString("sorts", "");
         return gson.fromJson(json, SortConstraints.class);

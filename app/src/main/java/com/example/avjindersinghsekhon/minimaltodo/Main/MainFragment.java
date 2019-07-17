@@ -129,7 +129,7 @@ public class MainFragment extends AppDefaultFragment {
 
         storeRetrieveData = new StoreRetrieveData(getContext(), FILENAME);
         mToDoItemsArrayList = getLocallyStoredData(storeRetrieveData);
-        adapterData = getDataByFilter(mToDoItemsArrayList);
+        adapterData = getDataByFilter(mToDoItemsArrayList, adapterData);
         adapterData = sortData(adapterData);
         adapter = new MainFragment.BasicListAdapter(adapterData);
         setAlarms();
@@ -167,7 +167,7 @@ public class MainFragment extends AppDefaultFragment {
             public void onClick(View v) {
                 app.send(this, "Action", "FAB pressed");
                 Intent newTodo = new Intent(getContext(), AddToDoActivity.class);
-                ToDoItem item = new ToDoItem("","", "No Type", "very important", false, null);
+                ToDoItem item = new ToDoItem("","", "No Type", "very important", new Date(), false, null);
                 //noinspection ResourceType
 //                String color = getResources().getString(R.color.primary_ligher);
                 newTodo.putExtra(TODOITEM, item);
@@ -239,10 +239,8 @@ public class MainFragment extends AppDefaultFragment {
         filter_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FilterFragment fragment = new FilterFragment();
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, fragment).addToBackStack(this.toString());
-                transaction.commit();
+                Intent i = new Intent(getContext(), FilterActivity.class);
+                startActivityForResult(i, REQUEST_ID_FILTER);
             }
         });
 
@@ -250,37 +248,43 @@ public class MainFragment extends AppDefaultFragment {
         sort_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SortFragment fragment = new SortFragment();
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, fragment).addToBackStack(this.toString());
-                transaction.commit();
+                Intent i = new Intent(getContext(), SortActivity.class);
+                startActivityForResult(i, REQUEST_ID_SORT);
             }
         });
 
     }
 
-    private ArrayList<ToDoItem> getDataByFilter(ArrayList<ToDoItem> mToDoItemsArrayList) {
+    private ArrayList<ToDoItem> getDataByFilter(ArrayList<ToDoItem> mToDoItemsArrayList, ArrayList<ToDoItem> adapterData) {
         FilterConstraints filterConstraints = StoreRetrieveData.getFilters(getActivity());
-        ArrayList<ToDoItem> result = new ArrayList<>();
+        if (adapterData == null)
+            adapterData = new ArrayList<>();
+        adapterData.clear();
 
         for (int i = 0; i < mToDoItemsArrayList.size() ; i++) {
             if (filterConstraints.getImportanceConstraints().contains(mToDoItemsArrayList.get(i).getImportance()) &&
                     filterConstraints.getTypeConstraints().contains(mToDoItemsArrayList.get(i).getType())){
-                result.add(mToDoItemsArrayList.get(i));
+                adapterData.add(mToDoItemsArrayList.get(i));
             }
         }
-        return result;
+        return adapterData;
     }
 
     private ArrayList<ToDoItem> sortData(ArrayList<ToDoItem> adapterData) {
         SortConstraints sortConstraints = StoreRetrieveData.getSorts(getActivity());
 
         if (sortConstraints.getSortBy().equals("date"))
-            Log.i("seyyed", adapterData.toString());
             Collections.sort(adapterData, new Comparator<ToDoItem>() {
                 @Override
                 public int compare(ToDoItem t1, ToDoItem t2) {
                     return t1.getToDoDate().compareTo(t2.getToDoDate());
+                }
+            });
+        if (sortConstraints.getSortBy().equals("create time"))
+            Collections.sort(adapterData, new Comparator<ToDoItem>() {
+                @Override
+                public int compare(ToDoItem t1, ToDoItem t2) {
+                    return t1.getCreateTime().compareTo(t2.getCreateTime());
                 }
             });
         if (sortConstraints.getSortBy().equals("importance"))
@@ -487,6 +491,16 @@ public class MainFragment extends AppDefaultFragment {
 
 
         }
+        if (resultCode != RESULT_CANCELED && requestCode == REQUEST_ID_SORT){
+            adapterData = getDataByFilter(mToDoItemsArrayList, adapterData);
+            adapterData = sortData(adapterData);
+            adapter.notifyDataSetChanged();
+        }
+        if (resultCode != RESULT_CANCELED && requestCode == REQUEST_ID_FILTER){
+            adapterData = getDataByFilter(mToDoItemsArrayList, adapterData);
+            adapterData = sortData(adapterData);
+            adapter.notifyDataSetChanged();
+        }
     }
 
     private AlarmManager getAlarmManager() {
@@ -522,16 +536,6 @@ public class MainFragment extends AppDefaultFragment {
     }
 
 
-    public void makeUpItems(ArrayList<ToDoItem> items, int len) {
-        for (String testString : testStrings) {
-            ToDoItem item = new ToDoItem(testString,testString, "", "", false, new Date());//TODO bug
-            //noinspection ResourceType
-//            item.setTodoColor(getResources().getString(R.color.red_secondary));
-            items.add(item);
-        }
-
-    }
-
     public class BasicListAdapter extends RecyclerView.Adapter<BasicListAdapter.ViewHolder> implements ItemTouchHelperClass.ItemTouchHelperAdapter {
         private ArrayList<ToDoItem> items;
 
@@ -555,11 +559,11 @@ public class MainFragment extends AppDefaultFragment {
             app.send(this, "Action", "Swiped Todo Away");
 
             mJustDeletedToDoItem = items.remove(position);
-            if (items.size() == 0)
-                buttons_layout.setVisibility(View.INVISIBLE);
 
             final int index = getIndex(mJustDeletedToDoItem);
             mToDoItemsArrayList.remove(index);
+            if (mToDoItemsArrayList.size() == 0)
+                buttons_layout.setVisibility(View.INVISIBLE);
 
             mIndexOfDeletedToDoItem = position;
             Intent i = new Intent(getContext(), TodoNotificationService.class);

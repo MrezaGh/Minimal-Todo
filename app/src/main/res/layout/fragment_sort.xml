@@ -19,6 +19,13 @@
         android:layout_height="wrap_content" >
 
         <RadioButton
+            android:id="@+id/sort_create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="create time"
+            android:checked="true" />
+
+        <RadioButton
             android:id="@+id/sort_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

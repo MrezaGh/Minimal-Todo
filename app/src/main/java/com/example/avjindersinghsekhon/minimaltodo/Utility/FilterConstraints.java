@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class FilterConstraints {
     private ArrayList<String> types = new ArrayList<>();
     {
-        types.add("No type");
+        types.add("No Type");
         types.add("Work");
         types.add("University");
         types.add("Recreation");

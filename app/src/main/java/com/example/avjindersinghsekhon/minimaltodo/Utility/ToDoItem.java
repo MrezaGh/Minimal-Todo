@@ -15,6 +15,7 @@ public class ToDoItem implements Serializable {
     //    private Date mLastEdited;
     private int mTodoColor;
     private Date mToDoDate;
+    private Date createTime;
     private UUID mTodoIdentifier;
     private String importance;//////////
     private String type;//////////
@@ -26,11 +27,12 @@ public class ToDoItem implements Serializable {
     private static final String TODOCOLOR = "todocolor";
     private static final String TYPE = "type";
     private static final String IMPORTANCE = "import";
+    private static final String CREATETIME = "c_time";
     private static final String TODODATE = "tododate";
     private static final String TODOIDENTIFIER = "todoidentifier";
 
 
-    public ToDoItem(String todoBody,String tododescription, String type, String importance, boolean hasReminder, Date toDoDate) {
+    public ToDoItem(String todoBody,String tododescription, String type, String importance, Date createTime, boolean hasReminder, Date toDoDate) {
         mToDoText = todoBody;
         mHasReminder = hasReminder;
         mToDoDate = toDoDate;
@@ -39,6 +41,7 @@ public class ToDoItem implements Serializable {
         mTodoIdentifier = UUID.randomUUID();
         this.importance = importance;
         this.type = type;
+        this.createTime = createTime;
     }
 
     public ToDoItem(JSONObject jsonObject) throws JSONException {
@@ -48,6 +51,7 @@ public class ToDoItem implements Serializable {
         mTodoColor = jsonObject.getInt(TODOCOLOR);
         type = jsonObject.getString(TYPE);
         importance = jsonObject.getString(IMPORTANCE);
+        createTime = new Date(jsonObject.getLong(CREATETIME));
 
         mTodoIdentifier = UUID.fromString(jsonObject.getString(TODOIDENTIFIER));
 
@@ -64,6 +68,7 @@ public class ToDoItem implements Serializable {
         jsonObject.put(TODOTEXT, mToDoText);
         jsonObject.put(TYPE, type);
         jsonObject.put(IMPORTANCE, importance);
+        jsonObject.put(CREATETIME, createTime.getTime());
         jsonObject.put(TODOREMINDER, mHasReminder);
         jsonObject.put(TODODESCRIPTION, mToDoDescription);
 //        jsonObject.put(TODOLASTEDITED, mLastEdited.getTime());
@@ -76,10 +81,6 @@ public class ToDoItem implements Serializable {
         return jsonObject;
     }
 
-
-    public ToDoItem() {
-        this("Clean my room","Sweep and Mop my Room", "no type", "very important", true, new Date());
-    }
 
     public String getmToDoDescription() { return mToDoDescription;}
 
@@ -132,6 +133,14 @@ public class ToDoItem implements Serializable {
 
     public void setImportance(String importance) {
         this.importance = importance;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     public void setType(String type) {
