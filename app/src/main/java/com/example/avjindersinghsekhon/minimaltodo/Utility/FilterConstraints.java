@@ -5,10 +5,10 @@ import java.util.ArrayList;
 public class FilterConstraints {
     private ArrayList<String> types = new ArrayList<>();
     {
-        types.add("no type");
-        types.add("work");
-        types.add("university");
-        types.add("recreation");
+        types.add("No type");
+        types.add("Work");
+        types.add("University");
+        types.add("Recreation");
     }
     private ArrayList<String> typeConstraints = new ArrayList<>();
 

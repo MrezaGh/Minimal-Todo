@@ -83,29 +83,28 @@
             <LinearLayout
                 android:id="@+id/todoReminderAndDateContainerLayout"
                 android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_marginLeft="32dp"
                 android:layout_marginRight="32dp"
-                android:layout_height="0dp"
                 android:layout_weight="1.5"
                 android:orientation="vertical">
 
 
                 <Spinner
                     android:id="@+id/spinner"
-                    android:layout_width="149dp"
-                    android:layout_height="40dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
-                    />
-
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:textAlignment="center"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginLeft="0dp"
-                    android:layout_marginRight="0dp"
                     android:layout_marginTop="30dp"
+                    android:layout_marginRight="0dp"
                     android:layout_weight=".5"
                     android:gravity="center"
                     android:orientation="horizontal">
@@ -122,13 +121,13 @@
                     <TextView
                         android:id="@+id/userToDoRemindMeTextView"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:layout_weight="2"
                         android:gravity="start"
-                        android:paddingBottom="8dp"
                         android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
                         android:paddingTop="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingBottom="8dp"
                         android:text="@string/remind_me"
                         android:textColor="@color/secondary_text"
                         android:textSize="16sp" />
@@ -177,19 +176,20 @@
                         <EditText
                             android:id="@+id/newTodoDateEditText"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1.5"
+                            android:layout_height="60dp"
+                            android:layout_weight="2"
                             android:editable="false"
                             android:focusable="false"
                             android:focusableInTouchMode="false"
-                            android:gravity="center"
-                            android:textIsSelectable="false" />
+                            android:gravity="top"
+                            android:textIsSelectable="false"
+                            android:textSize="14sp"/>
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight=".2"
-                            android:gravity="center"
+                            android:layout_weight="1"
+                            android:gravity="top"
                             android:padding="4dp"
                             android:text="\@"
                             android:textColor="?attr/colorAccent" />
@@ -197,13 +197,14 @@
                         <EditText
                             android:id="@+id/newTodoTimeEditText"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_height="60dp"
+                            android:layout_weight="2"
                             android:editable="false"
                             android:focusable="false"
                             android:focusableInTouchMode="false"
                             android:gravity="center"
-                            android:textIsSelectable="false" />
+                            android:textIsSelectable="false"
+                            android:textSize="14sp"/>
 
 
                     </LinearLayout>
@@ -212,46 +213,54 @@
                         android:id="@+id/newToDoDateTimeReminderTextView"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight="2"
-                        android:gravity="start"
+                        android:layout_weight="1"
+                        android:gravity="center"
+
                         android:text="@string/remind_date_and_time"
                         android:textColor="@color/secondary_text"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                 </LinearLayout>
-
-                <RadioGroup
-                    android:id="@+id/radioImportance"
+                <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="36dp"
-                    android:layout_marginBottom="36dp">
-
-                    <RadioButton
-                        android:id="@+id/radioVeryImportant"
+                    android:layout_height="wrap_content">
+                    <RadioGroup
+                        android:id="@+id/radioImportance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/very_important"
-                        android:checked="true" />
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginBottom="5dp"
+                        android:orientation="vertical">
 
-                    <RadioButton
-                        android:id="@+id/radioImportant"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/important" />
-                    <RadioButton
-                        android:id="@+id/radioLessImportant"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/less_important" />
-                    <RadioButton
-                        android:id="@+id/radioNotImportant"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/not_important" />
+                        <RadioButton
+                            android:id="@+id/radioVeryImportant"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:text="@string/very_important" />
 
-                </RadioGroup>
+                        <RadioButton
+                            android:id="@+id/radioImportant"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/important" />
 
+                        <RadioButton
+                            android:id="@+id/radioLessImportant"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/less_important"
+
+                            />
+
+                        <RadioButton
+                            android:id="@+id/radioNotImportant"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/not_important" />
+
+                    </RadioGroup>
+                </RelativeLayout>
 
             </LinearLayout>
 
