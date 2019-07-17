@@ -43,8 +43,19 @@ public class MainActivity extends AppDefaultActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuItem warner = menu.findItem(R.id.menu_warner);
+        boolean danger = check_if_deadline_is_near();
+        if (danger)
+            warner.setIcon(R.drawable.warning_icon);
+        else
+            warner.setIcon(R.drawable.done_icon);
         return true;
     }
+
+    private boolean check_if_deadline_is_near() {
+        return true;
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

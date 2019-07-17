@@ -125,7 +125,9 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 //        setContentView(R.layout.new_to_do_layout);
         //Need references to these to change them during light/dark mode
         ImageButton reminderIconImageButton;
+        ImageButton warnMeIconImageBUtton;
         TextView reminderRemindMeTextView;
+        TextView warnerWarnMeTextView;
 
 
         theme = getActivity().getSharedPreferences(MainFragment.THEME_PREFERENCES, MODE_PRIVATE).getString(MainFragment.THEME_SAVED, MainFragment.LIGHTTHEME);
@@ -180,6 +182,11 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             reminderIconImageButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_alarm_add_white_24dp));
             reminderRemindMeTextView.setTextColor(Color.WHITE);
         }
+
+        //warn me
+
+        warnMeIconImageBUtton = (ImageButton) view.findViewById(R.id.userToDoWarnerIconImageButton);
+        warnerWarnMeTextView = (TextView) view.findViewById(R.id.userToDoWarnMeTextView);
 
 
 
