@@ -276,6 +276,7 @@ public class MainFragment extends AppDefaultFragment {
         SortConstraints sortConstraints = StoreRetrieveData.getSorts(getActivity());
 
         if (sortConstraints.getSortBy().equals("date"))
+            Log.i("seyyed", adapterData.toString());
             Collections.sort(adapterData, new Comparator<ToDoItem>() {
                 @Override
                 public int compare(ToDoItem t1, ToDoItem t2) {
