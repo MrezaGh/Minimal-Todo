@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -13,6 +14,12 @@ import com.example.avjindersinghsekhon.minimaltodo.AppDefault.AppDefaultActivity
 import com.example.avjindersinghsekhon.minimaltodo.R;
 import com.example.avjindersinghsekhon.minimaltodo.Settings.SettingsActivity;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.StoreRetrieveData;
+import com.example.avjindersinghsekhon.minimaltodo.Utility.ToDoItem;
+
+import java.util.ArrayList;
+import java.util.Date;
+
+import static com.example.avjindersinghsekhon.minimaltodo.Main.MainFragment.getLocallyStoredData;
 
 public class MainActivity extends AppDefaultActivity {
 
@@ -53,7 +60,20 @@ public class MainActivity extends AppDefaultActivity {
     }
 
     private boolean check_if_deadline_is_near() {
-        return true;
+
+        boolean pastDeadline = false;
+        StoreRetrieveData storeRetrieveData = new StoreRetrieveData(this, "todoitems.json");
+        ArrayList<ToDoItem> mToDoItemsArrayList = getLocallyStoredData(storeRetrieveData);
+        for (ToDoItem item : mToDoItemsArrayList){
+            Log.i("item time: ", item.getToDoDate().toString());
+            Log.i("current time: ", new Date().toString());
+            Log.i("is it before: ", String.valueOf(item.getToDoDate().before(new Date())));
+            if (item.getToDoDate().before(new Date())){
+                pastDeadline = true;
+            }
+
+        }
+        return pastDeadline;
     }
 
 
