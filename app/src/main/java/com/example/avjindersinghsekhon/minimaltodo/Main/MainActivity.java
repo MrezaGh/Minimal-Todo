@@ -12,6 +12,7 @@ import com.example.avjindersinghsekhon.minimaltodo.About.AboutActivity;
 import com.example.avjindersinghsekhon.minimaltodo.AppDefault.AppDefaultActivity;
 import com.example.avjindersinghsekhon.minimaltodo.R;
 import com.example.avjindersinghsekhon.minimaltodo.Settings.SettingsActivity;
+import com.example.avjindersinghsekhon.minimaltodo.Utility.StoreRetrieveData;
 
 public class MainActivity extends AppDefaultActivity {
 
@@ -23,6 +24,8 @@ public class MainActivity extends AppDefaultActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
+
+        StoreRetrieveData.saveFullFilter(this);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.example.avjindersinghsekhon.minimaltodo.Main;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.avjindersinghsekhon.minimaltodo.About.AboutActivity;
 import com.example.avjindersinghsekhon.minimaltodo.AddToDo.AddToDoActivity;
@@ -23,6 +26,7 @@ import com.example.avjindersinghsekhon.minimaltodo.AppDefault.AppDefaultFragment
 import com.example.avjindersinghsekhon.minimaltodo.R;
 import com.example.avjindersinghsekhon.minimaltodo.Reminder.ReminderFragment;
 import com.example.avjindersinghsekhon.minimaltodo.Settings.SettingsActivity;
+import com.example.avjindersinghsekhon.minimaltodo.Utility.FilterConstraints;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ItemTouchHelperClass;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.RecyclerViewEmptySupport;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.StoreRetrieveData;
@@ -69,6 +73,143 @@ public class FilterFragment extends AppDefaultFragment {
 
         super.onCreate(savedInstanceState);
 
+        Button f1 = (Button) view.findViewById(R.id.filter_importance);
+        final String[] items = {"very important", "important", "less important", "not important"};
+        final boolean[] checked = new boolean[4];
+        final ArrayList<Integer> choices = new ArrayList<>();
+
+        FilterConstraints f = StoreRetrieveData.getFilters(getActivity());
+        for (int i = 0; i < f.getImportanceConstraints().size() ; i++) {
+            String s = f.getImportanceConstraints().get(i);
+            if (s.equals("very important")){
+                checked[0] = true;
+                choices.add(0);
+            }
+            if (s.equals("important")){
+                checked[1] = true;
+                choices.add(1);
+            }
+            if (s.equals("less important")){
+                checked[2] = true;
+                choices.add(2);
+            }
+            if (s.equals("not important")){
+                checked[3] = true;
+                choices.add(3);
+            }
+        }
+
+        f1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Categories");
+                builder.setMultiChoiceItems(items, checked, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+
+                        if (!choices.contains(i)){
+                            choices.add(i);
+                        } else {
+                            choices.remove(Integer.valueOf(i));
+                        }
+                    }
+                });
+                builder.setCancelable(false);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        FilterConstraints f = StoreRetrieveData.getFilters(getActivity());
+                        f.clearImportance();
+                        for (int j = 0; j < choices.size() ; j++) {
+                            f.addImportanceConstraint(items[choices.get(j)]);
+                        }
+                        StoreRetrieveData.saveFilter(getActivity(), f);
+                    }
+                });
+
+                builder.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
+
+
+        ///////////////////////////////////////type
+
+        Button t = (Button) view.findViewById(R.id.filter_type);
+        final String[] items1 = {"no type", "work", "university", "recreation"};
+        final boolean[] checked1 = new boolean[4];
+        final ArrayList<Integer> choices1 = new ArrayList<>();
+
+        FilterConstraints f2 = StoreRetrieveData.getFilters(getActivity());
+        for (int i = 0; i < f2.getTypeConstraints().size() ; i++) {
+            String s = f2.getTypeConstraints().get(i);
+            int index = -1;
+            for (int ii = 0; ii < items1.length; ii++)
+                if (s.equals(items1[ii])) {
+                    index = ii;
+                    break;
+                }
+                checked1[index] = true;
+                choices1.add(index);
+        }
+
+        t.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Categories");
+                builder.setMultiChoiceItems(items1, checked1, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+
+                        if (!choices1.contains(i)){
+                            choices1.add(i);
+                        } else {
+                            choices1.remove(Integer.valueOf(i));
+                        }
+                    }
+                });
+                builder.setCancelable(false);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        FilterConstraints f = StoreRetrieveData.getFilters(getActivity());
+                        f.clearType();
+                        for (int j = 0; j < choices1.size() ; j++) {
+                            f.addTypeConstraint(items1[choices1.get(j)]);
+                        }
+                        StoreRetrieveData.saveFilter(getActivity(), f);
+                    }
+                });
+
+                builder.setNegativeButton("Dismiss", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
+        Button apply = (Button) view.findViewById(R.id.filter_apply);
+        apply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getFragmentManager().popBackStack();
+            }
+        });
     }
 
     @Override
@@ -76,24 +217,12 @@ public class FilterFragment extends AppDefaultFragment {
         super.onResume();
         app.send(this);
 
-        if (getActivity().getSharedPreferences(THEME_PREFERENCES, MODE_PRIVATE).getBoolean(RECREATE_ACTIVITY, false)) {
-            SharedPreferences.Editor editor = getActivity().getSharedPreferences(THEME_PREFERENCES, MODE_PRIVATE).edit();
-            editor.putBoolean(RECREATE_ACTIVITY, false);
-            editor.apply();
-            getActivity().recreate();
-        }
-
-
     }
 
     @Override
     public void onStart() {
         app = (AnalyticsApplication) getActivity().getApplication();
         super.onStart();
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREF_DATA_SET_CHANGED, MODE_PRIVATE);
-        if (sharedPreferences.getBoolean(CHANGE_OCCURED, false)) {
-
-        }
     }
 
     @Override
@@ -103,6 +232,6 @@ public class FilterFragment extends AppDefaultFragment {
 
     @Override
     protected int layoutRes() {
-        return R.layout.fragment_main;
+        return R.layout.fragment_filter;
     }
 }

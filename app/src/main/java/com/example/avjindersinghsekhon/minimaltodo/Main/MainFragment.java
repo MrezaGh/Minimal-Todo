@@ -42,12 +42,14 @@ import com.example.avjindersinghsekhon.minimaltodo.AppDefault.AppDefaultFragment
 import com.example.avjindersinghsekhon.minimaltodo.R;
 import com.example.avjindersinghsekhon.minimaltodo.Reminder.ReminderFragment;
 import com.example.avjindersinghsekhon.minimaltodo.Settings.SettingsActivity;
+import com.example.avjindersinghsekhon.minimaltodo.Utility.FilterConstraints;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ItemTouchHelperClass;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.LocaleHelper;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.RecyclerViewEmptySupport;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.StoreRetrieveData;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ToDoItem;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.TodoNotificationService;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 
@@ -124,7 +126,7 @@ public class MainFragment extends AppDefaultFragment {
 
         storeRetrieveData = new StoreRetrieveData(getContext(), FILENAME);
         mToDoItemsArrayList = getLocallyStoredData(storeRetrieveData);
-        adapterData = (ArrayList<ToDoItem>) mToDoItemsArrayList.clone();
+        adapterData = getDataByFilter(mToDoItemsArrayList);
         adapter = new MainFragment.BasicListAdapter(adapterData);
         setAlarms();
 
@@ -240,6 +242,19 @@ public class MainFragment extends AppDefaultFragment {
             }
         });
 
+    }
+
+    private ArrayList<ToDoItem> getDataByFilter(ArrayList<ToDoItem> mToDoItemsArrayList) {
+        FilterConstraints filterConstraints = StoreRetrieveData.getFilters(getActivity());
+        ArrayList<ToDoItem> result = new ArrayList<>();
+
+        for (int i = 0; i < mToDoItemsArrayList.size() ; i++) {
+            if (filterConstraints.getImportanceConstraints().contains(mToDoItemsArrayList.get(i).getImportance()) &&
+                    filterConstraints.getTypeConstraints().contains(mToDoItemsArrayList.get(i).getType())){
+                result.add(mToDoItemsArrayList.get(i));
+            }
+        }
+        return result;
     }
 
     public static ArrayList<ToDoItem> getLocallyStoredData(StoreRetrieveData storeRetrieveData) {

@@ -1,6 +1,10 @@
 package com.example.avjindersinghsekhon.minimaltodo.Utility;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.support.v4.app.FragmentActivity;
+
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,6 +19,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class StoreRetrieveData {
     private Context mContext;
@@ -32,6 +38,36 @@ public class StoreRetrieveData {
             jsonArray.put(jsonObject);
         }
         return jsonArray;
+    }
+
+    public static void saveFullFilter(FragmentActivity activity) {
+        SharedPreferences mPrefs = activity.getPreferences(MODE_PRIVATE);
+        FilterConstraints filters = new FilterConstraints();
+        filters.addAllImportanceConstraint();
+        filters.addAllTypeConstraint();
+
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(filters);
+        prefsEditor.putString("filters", json);
+        prefsEditor.apply();
+    }
+
+    public static void saveFilter(FragmentActivity activity, FilterConstraints filterConstraints) {
+        SharedPreferences mPrefs = activity.getPreferences(MODE_PRIVATE);
+
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(filterConstraints);
+        prefsEditor.putString("filters", json);
+        prefsEditor.apply();
+    }
+
+    public static FilterConstraints getFilters(FragmentActivity activity){
+        SharedPreferences mPrefs = activity.getPreferences(MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = mPrefs.getString("filters", "");
+        return gson.fromJson(json, FilterConstraints.class);
     }
 
     public void saveToFile(ArrayList<ToDoItem> items) throws JSONException, IOException {
