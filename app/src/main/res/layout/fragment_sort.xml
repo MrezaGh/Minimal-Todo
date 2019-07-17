@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:gravity="center|top"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:text="sort by:"
+        android:gravity="center"
+        android:textSize="24sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <RadioGroup
+        android:id="@+id/radio_group_sort"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <RadioButton
+            android:id="@+id/sort_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="date"
+            android:checked="true" />
+
+        <RadioButton
+            android:id="@+id/sort_importance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="importance" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/aboutVersionTextView"
+        android:text="decrease/increase"
+        android:layout_marginTop="4dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <RadioGroup
+        android:id="@+id/radio_group_inc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <RadioButton
+            android:id="@+id/sort_inc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="increase"
+            android:checked="true" />
+
+        <RadioButton
+            android:id="@+id/sort_dec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="decrease" />
+
+    </RadioGroup>
+
+
+    <Button
+        android:id="@+id/sort_apply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="apply"
+        android:padding="8dp"
+        android:visibility="visible" />
+</LinearLayout>

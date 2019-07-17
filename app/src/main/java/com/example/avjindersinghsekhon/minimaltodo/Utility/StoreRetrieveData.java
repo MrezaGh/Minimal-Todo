@@ -70,6 +70,37 @@ public class StoreRetrieveData {
         return gson.fromJson(json, FilterConstraints.class);
     }
 
+
+    public static void saveFullSort(FragmentActivity activity) {
+        SharedPreferences mPrefs = activity.getPreferences(MODE_PRIVATE);
+        SortConstraints sorts = new SortConstraints();
+        sorts.setIncrease();
+        sorts.setSortByDate();
+
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(sorts);
+        prefsEditor.putString("sorts", json);
+        prefsEditor.apply();
+    }
+
+    public static void saveSort(FragmentActivity activity, SortConstraints sortConstraints) {
+        SharedPreferences mPrefs = activity.getPreferences(MODE_PRIVATE);
+
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(sortConstraints);
+        prefsEditor.putString("sorts", json);
+        prefsEditor.apply();
+    }
+
+    public static SortConstraints getSorts(FragmentActivity activity){
+        SharedPreferences mPrefs = activity.getPreferences(MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = mPrefs.getString("sorts", "");
+        return gson.fromJson(json, SortConstraints.class);
+    }
+
     public void saveToFile(ArrayList<ToDoItem> items) throws JSONException, IOException {
         FileOutputStream fileOutputStream;
         OutputStreamWriter outputStreamWriter;

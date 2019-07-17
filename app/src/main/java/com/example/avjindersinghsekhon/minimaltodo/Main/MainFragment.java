@@ -46,6 +46,7 @@ import com.example.avjindersinghsekhon.minimaltodo.Utility.FilterConstraints;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ItemTouchHelperClass;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.LocaleHelper;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.RecyclerViewEmptySupport;
+import com.example.avjindersinghsekhon.minimaltodo.Utility.SortConstraints;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.StoreRetrieveData;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ToDoItem;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.TodoNotificationService;
@@ -56,6 +57,7 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 import static android.app.Activity.RESULT_CANCELED;
@@ -127,6 +129,7 @@ public class MainFragment extends AppDefaultFragment {
         storeRetrieveData = new StoreRetrieveData(getContext(), FILENAME);
         mToDoItemsArrayList = getLocallyStoredData(storeRetrieveData);
         adapterData = getDataByFilter(mToDoItemsArrayList);
+        adapterData = sortData(adapterData);
         adapter = new MainFragment.BasicListAdapter(adapterData);
         setAlarms();
 
@@ -242,6 +245,17 @@ public class MainFragment extends AppDefaultFragment {
             }
         });
 
+        Button sort_button = (Button) view.findViewById(R.id.sort_button);
+        sort_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SortFragment fragment = new SortFragment();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, fragment).addToBackStack(this.toString());
+                transaction.commit();
+            }
+        });
+
     }
 
     private ArrayList<ToDoItem> getDataByFilter(ArrayList<ToDoItem> mToDoItemsArrayList) {
@@ -255,6 +269,42 @@ public class MainFragment extends AppDefaultFragment {
             }
         }
         return result;
+    }
+
+    private ArrayList<ToDoItem> sortData(ArrayList<ToDoItem> adapterData) {
+        SortConstraints sortConstraints = StoreRetrieveData.getSorts(getActivity());
+
+        if (sortConstraints.getSortBy().equals("date"))
+            Collections.sort(adapterData, new Comparator<ToDoItem>() {
+                @Override
+                public int compare(ToDoItem t1, ToDoItem t2) {
+                    return t1.getToDoDate().compareTo(t2.getToDoDate());
+                }
+            });
+        if (sortConstraints.getSortBy().equals("importance"))
+            Collections.sort(adapterData, new Comparator<ToDoItem>() {
+                @Override
+                public int compare(ToDoItem t1, ToDoItem t2) {
+                    return getNumOf(t1.getImportance()).compareTo(getNumOf(t2.getImportance()));
+                }
+            });
+
+        if (!sortConstraints.isIncrease())
+            Collections.reverse(adapterData);
+
+        return adapterData;
+    }
+
+    private Integer getNumOf(String s){
+        if (s.equals("very important"))
+            return 3;
+        if (s.equals("important"))
+            return 2;
+        if (s.equals("less important"))
+            return 1;
+        if (s.equals("not important"))
+            return 0;
+        return -1;
     }
 
     public static ArrayList<ToDoItem> getLocallyStoredData(StoreRetrieveData storeRetrieveData) {
@@ -500,6 +550,8 @@ public class MainFragment extends AppDefaultFragment {
             app.send(this, "Action", "Swiped Todo Away");
 
             mJustDeletedToDoItem = items.remove(position);
+            if (items.size() == 0)
+                buttons_layout.setVisibility(View.INVISIBLE);
 
             final int index = getIndex(mJustDeletedToDoItem);
             mToDoItemsArrayList.remove(index);
@@ -519,6 +571,7 @@ public class MainFragment extends AppDefaultFragment {
                             //Comment the line below if not using Google Analytics
                             app.send(this, "Action", "UNDO Pressed");
                             items.add(mIndexOfDeletedToDoItem, mJustDeletedToDoItem);
+                            buttons_layout.setVisibility(View.VISIBLE);
                             mToDoItemsArrayList.add(index, mJustDeletedToDoItem);
                             if (mJustDeletedToDoItem.getToDoDate() != null && mJustDeletedToDoItem.hasReminder()) {
                                 Intent i = new Intent(getContext(), TodoNotificationService.class);
