@@ -120,7 +120,7 @@ public class FilterFragment extends AppDefaultFragment {
         ///////////////////////////////////////type
 
         Button t = (Button) view.findViewById(R.id.filter_type);
-        final String[] items1 = {"no type", "work", "university", "recreation"};
+        final String[] items1 = {"No Type", "Work", "University", "Recreation"};
         final boolean[] checked1 = new boolean[4];
         final ArrayList<Integer> choices1 = new ArrayList<>();
 

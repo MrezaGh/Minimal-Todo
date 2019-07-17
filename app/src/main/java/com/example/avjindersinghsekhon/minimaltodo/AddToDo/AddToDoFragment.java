@@ -112,10 +112,10 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
     private ArrayList<String> types = new ArrayList<>();
     {
-        types.add("no type");
-        types.add("work");
-        types.add("university");
-        types.add("recreation");
+        types.add("No Type");
+        types.add("Work");
+        types.add("University");
+        types.add("Recreation");
     }
 
     @Override
@@ -733,19 +733,19 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
     private HashMap<String, Integer[]> color_by_type = new HashMap<>();
     {
-        color_by_type.put("no type", new Integer[]{Color.rgb(204, 204, 204),
+        color_by_type.put("No Type", new Integer[]{Color.rgb(204, 204, 204),
                 Color.rgb(153, 153, 153),
                 Color.rgb(102, 102, 102),
                 Color.rgb(51, 51, 51)});
-        color_by_type.put("work", new Integer[]{Color.rgb(255, 102, 102),
+        color_by_type.put("Work", new Integer[]{Color.rgb(255, 102, 102),
                 Color.rgb(255, 0, 0),
                 Color.rgb(204, 0, 0),
                 Color.rgb(153, 0, 0)});
-        color_by_type.put("university", new Integer[]{Color.rgb(102, 255, 102),
+        color_by_type.put("University", new Integer[]{Color.rgb(102, 255, 102),
                 Color.rgb(0, 204, 0),
                 Color.rgb(0, 153, 0),
                 Color.rgb(0, 102, 0)});
-        color_by_type.put("recreation", new Integer[]{Color.rgb(51, 204, 255),
+        color_by_type.put("Recreation", new Integer[]{Color.rgb(51, 204, 255),
                 Color.rgb(51, 153, 255),
                 Color.rgb(0, 0, 204),
                 Color.rgb(0, 0, 153)});

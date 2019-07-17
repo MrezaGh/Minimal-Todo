@@ -112,6 +112,7 @@ public class ReminderFragment extends AppDefaultFragment {
 //        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, snoozeOptionsArray);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.spinner_text_view, snoozeOptionsArray);
 //        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
 
         mSnoozeSpinner.setAdapter(adapter);
