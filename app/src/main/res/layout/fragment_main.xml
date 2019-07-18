@@ -85,7 +85,7 @@
                 android:layout_marginBottom="-10dp"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:text="Filter" />
+                android:text="@string/filter_button" />
 
             <Button
                 android:id="@+id/sort_button"
@@ -97,7 +97,7 @@
                 android:layout_marginBottom="-10dp"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:text="Sort" />
+                android:text="@string/sort_button" />
         </LinearLayout>
 
 

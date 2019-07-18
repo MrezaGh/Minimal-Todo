@@ -339,10 +339,10 @@ public class MainFragment extends AppDefaultFragment {
         else {
             buttons_layout.setVisibility(View.VISIBLE);
         }
-
+//
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String l = sharedPreferences.getBoolean("LanguagePreference", false)? "fa" : "en";
-        LocaleHelper.setLocale(getActivity(), l);
+//        String l = sharedPreferences.getBoolean("LanguagePreference", false)? "fa" : "en";
+//        LocaleHelper.setLocale(getActivity(), l);
         app.send(this);
 
         sharedPreferences = getActivity().getSharedPreferences(SHARED_PREF_DATA_SET_CHANGED, MODE_PRIVATE);

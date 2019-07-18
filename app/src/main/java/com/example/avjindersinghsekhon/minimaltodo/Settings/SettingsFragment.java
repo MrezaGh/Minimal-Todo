@@ -6,12 +6,14 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.PreferenceFragment;
+import android.util.DisplayMetrics;
 
 import com.example.avjindersinghsekhon.minimaltodo.AddToDo.AddToDoActivity;
 import com.example.avjindersinghsekhon.minimaltodo.Analytics.AnalyticsApplication;
@@ -19,6 +21,8 @@ import com.example.avjindersinghsekhon.minimaltodo.Main.MainFragment;
 import com.example.avjindersinghsekhon.minimaltodo.R;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.LocaleHelper;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.PreferenceKeys;
+
+import java.util.Locale;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
     AnalyticsApplication app;
@@ -57,33 +61,30 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             CheckBoxPreference checkBoxPreference = (CheckBoxPreference) findPreference(preferenceKeys.language_pref_key);
             if (checkBoxPreference.isChecked()) {
                 mLanguageCode="fa";
-                //Comment out this line if not using Google Analytics
-                LocaleHelper.setLocale(getActivity(), mLanguageCode);
-                //It is required to recreate the activity to reflect the change in UI.
-
-//                Fragment frg = null;
-//                frg = getFragmentManager().findFragmentByTag(TAG);
-//                final FragmentTransaction ft = getFragmentManager().beginTransaction();
-//                ft.detach(frg);
-//                ft.attach(frg);
-//                ft.commit();
-                  getActivity().finish();
-                  getActivity().recreate();
+//                LocaleHelper.setLocale(getActivity(), mLanguageCode);
+//                  getActivity().finish();
+                String languageToLoad  = "fa";
+                Locale locale = new Locale(languageToLoad);
+                Locale.setDefault(locale);
+                Configuration config = new Configuration();
+                config.locale = locale;
+                getActivity().getResources().updateConfiguration(config,
+                        getActivity().getResources().getDisplayMetrics());
+//                getActivity().setContentView(R.layout.activity_settings);
+                getActivity().finish();
 
             } else {
                 mLanguageCode="en";
-                //Comment out this line if not using Google Analytics
-                LocaleHelper.setLocale(getActivity(), mLanguageCode);
-                //It is required to recreate the activity to reflect the change in UI.
-
-//                Fragment frg = null;
-//                frg = getFragmentManager().findFragmentByTag(TAG);
-//                final FragmentTransaction ft = getFragmentManager().beginTransaction();
-//                ft.detach(frg);
-//                ft.attach(frg);
-//                ft.commit();
+//                LocaleHelper.setLocale(getActivity(), mLanguageCode);
+//                getActivity().finish();
+                String languageToLoad  = "en";
+                Locale locale = new Locale(languageToLoad);
+                Locale.setDefault(locale);
+                Configuration config = new Configuration();
+                config.locale = locale;
+                getActivity().getResources().updateConfiguration(config,
+                        getActivity().getResources().getDisplayMetrics());
                 getActivity().finish();
-                getActivity().recreate();
             }
 
         }

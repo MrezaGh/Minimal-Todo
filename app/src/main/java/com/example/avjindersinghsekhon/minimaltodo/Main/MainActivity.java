@@ -1,7 +1,10 @@
 package com.example.avjindersinghsekhon.minimaltodo.Main;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -18,13 +21,27 @@ import com.example.avjindersinghsekhon.minimaltodo.Utility.ToDoItem;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import static com.example.avjindersinghsekhon.minimaltodo.Main.MainFragment.getLocallyStoredData;
 
 public class MainActivity extends AppDefaultActivity {
 
+    private static final int REQUEST_ID_SETTINGS = 440;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //set language
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String languageToLoad = sharedPreferences.getBoolean("LanguagePreference", false)? "fa" : "en";
+        Locale locale = new Locale(languageToLoad);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        this.getResources().updateConfiguration(config,
+                this.getResources().getDisplayMetrics());
+
         final android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -117,7 +134,7 @@ public class MainActivity extends AppDefaultActivity {
 //                return true;
             case R.id.preferences:
                 Intent intent = new Intent(this, SettingsActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_ID_SETTINGS);
                 return true;
 
             default:
@@ -125,7 +142,14 @@ public class MainActivity extends AppDefaultActivity {
         }
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_ID_SETTINGS) {
+            Intent i = getIntent();
+            finish();
+            startActivity(i);
+        }
+    }
 }
 
 

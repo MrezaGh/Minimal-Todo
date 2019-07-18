@@ -37,4 +37,6 @@
     <string name="Persian">فارسی</string>
     <string name="English">انگیلیسی</string>
     <string name="language_pref_key">LanguagePreference</string>
+    <string name="sort_button">مرتب‌سازی</string>
+    <string name="filter_button">فیلتر‌کردن</string>
 </resources>
