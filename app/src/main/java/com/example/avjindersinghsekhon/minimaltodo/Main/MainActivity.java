@@ -149,6 +149,7 @@ public class MainActivity extends AppDefaultActivity {
             finish();
             startActivity(i);
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
 
