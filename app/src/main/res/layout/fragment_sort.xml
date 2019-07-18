@@ -7,7 +7,7 @@
 
 
     <TextView
-        android:text="sort by:"
+        android:text="@string/sort_by"
         android:gravity="center"
         android:textSize="24sp"
         android:layout_width="match_parent"
@@ -22,27 +22,27 @@
             android:id="@+id/sort_create"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="create time"
+            android:text="@string/create_time"
             android:checked="true" />
 
         <RadioButton
             android:id="@+id/sort_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="date"
+            android:text="@string/date"
             android:checked="true" />
 
         <RadioButton
             android:id="@+id/sort_importance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="importance" />
+            android:text="@string/importance" />
 
     </RadioGroup>
 
     <TextView
         android:id="@+id/aboutVersionTextView"
-        android:text="decrease/increase"
+        android:text="@string/decrease_increase"
         android:layout_marginTop="4dp"
         android:gravity="center"
         android:layout_width="match_parent"
@@ -57,14 +57,14 @@
             android:id="@+id/sort_inc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="increase"
+            android:text="@string/increase"
             android:checked="true" />
 
         <RadioButton
             android:id="@+id/sort_dec"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="decrease" />
+            android:text="@string/decrease" />
 
     </RadioGroup>
 
@@ -74,7 +74,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="apply"
+        android:text="@string/apply"
         android:padding="8dp"
         android:visibility="visible" />
 </LinearLayout>

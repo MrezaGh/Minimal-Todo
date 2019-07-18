@@ -40,4 +40,15 @@
     <string name="warn_me">warn me</string>
     <string name="sort_button">Sort</string>
     <string name="filter_button">Filter</string>
+    <string name="sort_by">sort by :</string>
+    <string name="create_time">create time</string>
+    <string name="date">date</string>
+    <string name="importance">importance</string>
+    <string name="decrease_increase">decrease/increase</string>
+    <string name="increase">increase</string>
+    <string name="decrease">decrease</string>
+    <string name="apply">apply</string>
+    <string name="Importance_filters">Importance filters</string>
+    <string name="filter">filter</string>
+    <string name="Type_filters">type filters</string>
 </resources>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Minimal</string>
     <string name="action_settings">تنظیمات</string>
@@ -39,4 +39,15 @@
     <string name="language_pref_key">LanguagePreference</string>
     <string name="sort_button">مرتب‌سازی</string>
     <string name="filter_button">فیلتر‌کردن</string>
+    <string name="sort_by">مرتب کردن بر اساس</string>
+    <string name="create_time">زمان تولید</string>
+    <string name="date">تاریخ</string>
+    <string name="importance">اهمیت</string>
+    <string name="decrease_increase">نزولی/صعودی</string>
+    <string name="increase">صعودی</string>
+    <string name="decrease">نزولی</string>
+    <string name="apply">اعمال</string>
+    <string name="Importance_filters">فیلتر های اهمیت</string>
+    <string name="filter">فیلتر</string>
+    <string name="Type_filters">فیلتر های تایپ</string>
 </resources>

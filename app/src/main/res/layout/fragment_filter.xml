@@ -7,7 +7,7 @@
 
 
     <TextView
-        android:text="Importance filters"
+        android:text="@string/Importance_filters"
         android:gravity="center"
         android:textSize="24sp"
         android:layout_width="match_parent"
@@ -18,13 +18,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="filter"
+        android:text="@string/filter"
         android:padding="8dp"
         android:visibility="visible" />
 
     <TextView
         android:id="@+id/aboutVersionTextView"
-        android:text="Type filters"
+        android:text="@string/Type_filters"
         android:layout_marginTop="4dp"
         android:gravity="center"
         android:layout_width="match_parent"
@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="filter"
+        android:text="@string/filter"
         android:padding="8dp"
         android:visibility="visible" />
 
@@ -45,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="apply"
+        android:text="@string/apply"
         android:padding="8dp"
         android:visibility="visible" />
 </LinearLayout>
