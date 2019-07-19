@@ -12,6 +12,8 @@ import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.EditTextPreference;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.util.DisplayMetrics;
 
@@ -21,7 +23,11 @@ import com.example.avjindersinghsekhon.minimaltodo.Main.MainFragment;
 import com.example.avjindersinghsekhon.minimaltodo.R;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.LocaleHelper;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.PreferenceKeys;
+import com.example.avjindersinghsekhon.minimaltodo.Utility.StoreRetrieveData;
 
+import org.json.JSONException;
+
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -33,6 +39,23 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences_layout);
         app = (AnalyticsApplication) getActivity().getApplication();
+        findPreference("newTypePreference").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+
+            @TargetApi(Build.VERSION_CODES.M)
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                PreferenceKeys preferenceKeys = new PreferenceKeys(getResources());
+                EditTextPreference editTextPreference = (EditTextPreference) findPreference(preferenceKeys.newType_pref_key);
+                String newType = editTextPreference.getEditText().getText().toString();
+                try {
+                    StoreRetrieveData.addType(getContext(),newType);
+                    ArrayList<String> array = StoreRetrieveData.getTypes(getContext());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return false;
+            }
+        });
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -87,6 +110,15 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 getActivity().finish();
             }
 
+        }else if (key.equals(preferenceKeys.newType_pref_key)){
+            EditTextPreference editTextPreference = (EditTextPreference) findPreference(preferenceKeys.newType_pref_key);
+            String newType = editTextPreference.getEditText().getText().toString();
+            try {
+                StoreRetrieveData.addType(getContext(),newType);
+                ArrayList<String> array = StoreRetrieveData.getTypes(getContext());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -101,4 +133,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         super.onPause();
         getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
     }
+
+
 }
