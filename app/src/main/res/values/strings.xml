@@ -54,4 +54,6 @@
     <string name="add">add attachment</string>
     <string name="back">back</string>
     <string name="ok">ok</string>
+    <string name="new_type">New Type</string>
+    <string name="newType_pref_key">newTypePreference</string>
 </resources>
