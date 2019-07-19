@@ -56,4 +56,8 @@
     <string name="ok">ok</string>
     <string name="new_type">New Type</string>
     <string name="newType_pref_key">newTypePreference</string>
+    <string name="select_your_work_day">Select Your Work Day:</string>
+    <string name="workHours">time you work. eg from 8 to 18:</string>
+    <string name="from">from:</string>
+    <string name="to">to:</string>
 </resources>

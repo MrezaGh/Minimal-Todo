@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:animateLayoutChanges="true"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -6,6 +7,13 @@
     >
 
     <include layout="@layout/base_toolbar"/>
+
+
+    <TextView
+        android:id="@+id/workSpinnerLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/select_your_work_day" />
 
     <Spinner
         android:id="@+id/work_days_spinner"
@@ -16,5 +24,68 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:textAlignment="center"/>
+
+    <TextView
+        android:id="@+id/workHoursLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/workHours" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/from" />
+
+    <EditText
+        android:id="@+id/work_from"
+        android:layout_width="168dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="time" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/to" />
+
+    <EditText
+        android:id="@+id/work_to"
+        android:layout_width="171dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="time" />
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/addWorkFloatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:src="@drawable/ic_send_white_18dp"
+        app:fabSize="normal"
+        app:layout_anchor="@id/editTextParentLinearLayout"
+        app:layout_anchorGravity="bottom|right" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Your Work Days Are:" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="95dp"
+        android:text="no work Determined yet" />
+
 
 </LinearLayout>
