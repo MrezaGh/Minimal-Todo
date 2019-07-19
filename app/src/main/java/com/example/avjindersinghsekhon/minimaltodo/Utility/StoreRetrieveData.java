@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import static android.content.Context.MODE_PRIVATE;
 
 public class StoreRetrieveData {
+    private static final String TYPES_ = "types_";
     private Context mContext;
     private String mFileName;
 
@@ -101,6 +102,55 @@ public class StoreRetrieveData {
         Gson gson = new Gson();
         String json = mPrefs.getString("sorts", "");
         return gson.fromJson(json, SortConstraints.class);
+    }
+
+    public static void loadTypes(Context context) throws JSONException {
+        SharedPreferences mPrefs = context.getSharedPreferences("types", MODE_PRIVATE);
+        JSONObject jsonObject = new JSONObject();
+        if (!mPrefs.contains("types_")){
+            ArrayList<String> types = new ArrayList<>();
+            {
+                types.add("No Type");
+                types.add("Work");
+                types.add("University");
+                types.add("Recreation");
+            }
+            jsonObject.put(TYPES_, new JSONArray(types));
+            SharedPreferences.Editor prefsEditor = mPrefs.edit();
+            prefsEditor.putString("types_", "");
+            prefsEditor.apply();
+        }
+    }
+
+    public static ArrayList<String> getTypes(Context context) throws JSONException {
+        ArrayList<String> types = new ArrayList<>();
+        JSONArray ja;
+        JSONObject jsonObject = new JSONObject();
+        ja = jsonObject.getJSONArray(TYPES_);
+        for (int i = 0; i < ja.length() ; i++) {
+            types.add(ja.getString(i));
+        }
+        return types;
+    }
+
+    public static void addType(Context context, String newType) throws JSONException {
+        ArrayList<String> types = getTypes(context);
+        if (types.contains(newType))
+            return;
+        types.add(newType);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(TYPES_, new JSONArray(types));
+    }
+
+    public static void removeType(Context context, String removedType) throws JSONException {
+        SharedPreferences mPrefs = context.getSharedPreferences("types", MODE_PRIVATE);
+
+        ArrayList<String> types = getTypes(context);
+        if (!types.contains(removedType))
+            return;
+        types.remove(removedType);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(TYPES_, new JSONArray(types));
     }
 
     public void saveToFile(ArrayList<ToDoItem> items) throws JSONException, IOException {

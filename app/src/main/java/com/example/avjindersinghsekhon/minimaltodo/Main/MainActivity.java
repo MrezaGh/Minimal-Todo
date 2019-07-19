@@ -19,6 +19,8 @@ import com.example.avjindersinghsekhon.minimaltodo.Settings.SettingsActivity;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.StoreRetrieveData;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ToDoItem;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
@@ -49,6 +51,11 @@ public class MainActivity extends AppDefaultActivity {
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
 
+        try {
+            StoreRetrieveData.loadTypes(this);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         StoreRetrieveData.saveFullFilter(this);
         StoreRetrieveData.saveFullSort(this);
     }
