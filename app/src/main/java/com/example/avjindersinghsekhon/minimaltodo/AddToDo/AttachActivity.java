@@ -40,6 +40,7 @@ public class AttachActivity extends AppCompatActivity implements MyAdapter.ItemC
     public static final String LIGHTTHEME = "com.avjindersekon.lighttheme";
 
     private ArrayList<String> paths;
+    private ArrayList<String> names;
     private MyAdapter adapter;
 
 
@@ -59,6 +60,7 @@ public class AttachActivity extends AppCompatActivity implements MyAdapter.ItemC
         getBaseContext().setTheme(mTheme);
 
         paths = (ArrayList) getIntent().getSerializableExtra(AddToDoFragment.ATTACHS);
+        names = getNames(paths);
 
         Button ab = (Button) findViewById(R.id.add_attach_button);
         ab.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +84,7 @@ public class AttachActivity extends AppCompatActivity implements MyAdapter.ItemC
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.attach_RecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MyAdapter(this, paths);
+        adapter = new MyAdapter(this, names);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
 
@@ -113,6 +115,7 @@ public class AttachActivity extends AppCompatActivity implements MyAdapter.ItemC
                     try {
                         String path = getPath(getBaseContext(), data.getData());
                         paths.add(path);
+                        names.add(getName(path));
                         adapter.notifyDataSetChanged();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -123,6 +126,17 @@ public class AttachActivity extends AppCompatActivity implements MyAdapter.ItemC
         }
     }
 
+    private ArrayList<String> getNames(ArrayList<String> paths){
+        ArrayList<String> res = new ArrayList<>();
+        for (int i = 0; i < paths.size(); i++) {
+            res.add(getName(paths.get(i)));
+        }
+        return res;
+    }
+
+    private String getName(String path){
+        return path.substring(path.lastIndexOf("/")+1);
+    }
 
     public String getFileName(Uri uri) {
         String result = null;
