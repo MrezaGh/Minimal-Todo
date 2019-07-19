@@ -50,4 +50,7 @@
     <string name="Importance_filters">فیلتر های اهمیت</string>
     <string name="filter">فیلتر</string>
     <string name="Type_filters">فیلتر های تایپ</string>
+    <string name="add">اضافه‌کردن پیوست</string>
+    <string name="back">بازگشت</string>
+    <string name="ok">تایید</string>
 </resources>

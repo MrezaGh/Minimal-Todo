@@ -1,9 +1,11 @@
 package com.example.avjindersinghsekhon.minimaltodo.Utility;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
@@ -17,6 +19,7 @@ public class ToDoItem implements Serializable {
     private Date mToDoDate;
     private Date createTime;
     private UUID mTodoIdentifier;
+    private ArrayList<String> attachPaths = new ArrayList<>();
     private String importance;//////////
     private String type;//////////
     //add description
@@ -27,6 +30,7 @@ public class ToDoItem implements Serializable {
     private static final String TODOCOLOR = "todocolor";
     private static final String TYPE = "type";
     private static final String IMPORTANCE = "import";
+    private static final String ATTACH = "attach";
     private static final String CREATETIME = "c_time";
     private static final String TODODATE = "tododate";
     private static final String TODOIDENTIFIER = "todoidentifier";
@@ -51,6 +55,10 @@ public class ToDoItem implements Serializable {
         mTodoColor = jsonObject.getInt(TODOCOLOR);
         type = jsonObject.getString(TYPE);
         importance = jsonObject.getString(IMPORTANCE);
+        JSONArray ja = jsonObject.getJSONArray(ATTACH);
+        for (int i = 0; i < ja.length() ; i++) {
+            attachPaths.add(ja.getString(i));
+        }
         createTime = new Date(jsonObject.getLong(CREATETIME));
 
         mTodoIdentifier = UUID.fromString(jsonObject.getString(TODOIDENTIFIER));
@@ -68,6 +76,7 @@ public class ToDoItem implements Serializable {
         jsonObject.put(TODOTEXT, mToDoText);
         jsonObject.put(TYPE, type);
         jsonObject.put(IMPORTANCE, importance);
+        jsonObject.put(ATTACH, new JSONArray(attachPaths));
         jsonObject.put(CREATETIME, createTime.getTime());
         jsonObject.put(TODOREMINDER, mHasReminder);
         jsonObject.put(TODODESCRIPTION, mToDoDescription);
@@ -131,6 +140,14 @@ public class ToDoItem implements Serializable {
         return importance;
     }
 
+    public ArrayList<String> getAttachPaths() {
+        return attachPaths;
+    }
+
+    public void addAttachPath(String attachPath) {
+        this.attachPaths.add(attachPath);
+    }
+
     public void setImportance(String importance) {
         this.importance = importance;
     }
@@ -145,6 +162,10 @@ public class ToDoItem implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public void setAttahPaths(ArrayList<String> mUserAttachs) {
+        this.attachPaths = mUserAttachs;
     }
 }
 

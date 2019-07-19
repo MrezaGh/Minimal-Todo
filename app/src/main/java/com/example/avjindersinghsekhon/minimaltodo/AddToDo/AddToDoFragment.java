@@ -1,14 +1,21 @@
 package com.example.avjindersinghsekhon.minimaltodo.AddToDo;
 
 import android.animation.Animator;
-import android.content.ClipData;
-import android.content.ClipboardManager;
+import android.content.ActivityNotFoundException;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
@@ -31,15 +38,12 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.content.ClipboardManager;
-import android.widget.Toast;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import com.example.avjindersinghsekhon.minimaltodo.Analytics.AnalyticsApplication;
 import com.example.avjindersinghsekhon.minimaltodo.AppDefault.AppDefaultFragment;
-import com.example.avjindersinghsekhon.minimaltodo.Main.MainActivity;
+import com.example.avjindersinghsekhon.minimaltodo.Main.FilterActivity;
 import com.example.avjindersinghsekhon.minimaltodo.Main.MainFragment;
 import com.example.avjindersinghsekhon.minimaltodo.R;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ToDoItem;
@@ -47,15 +51,13 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Set;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -89,13 +91,13 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
     private ToDoItem mUserToDoItem;
     private FloatingActionButton mToDoSendFloatingActionButton;
-    public static final String DATE_FORMAT = "MMM d, yyyy";
-    public static final String DATE_FORMAT_MONTH_DAY = "MMM d";
-    public static final String DATE_FORMAT_TIME = "H:m";
+    public static final String ATTACHS = "com.avjindersinghsekhon.com.avjindersinghsekhon.minimaltodo.AddToDoActivity";
+    private static final int ATTACHMENT = 788;
 
     private String mUserEnteredText;
     private String mUserEnteredDescription;
     private String mUserImportance;
+    private ArrayList<String> mUserAttachs;
     private String mUserType;
     private boolean mUserHasReminder;
     private Toolbar mToolbar;
@@ -106,7 +108,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     private LinearLayout mContainerLayout;
     private String theme;
     private RadioGroup radioImportanceGroup;
-    private static final int PICKFILE_RESULT_CODE = 1;
+    public static final int PICKFILE_RESULT_CODE = 1;
 //    TextView textFile;
     AnalyticsApplication app;
 
@@ -162,6 +164,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         mUserEnteredText = mUserToDoItem.getToDoText();
         mUserEnteredDescription = mUserToDoItem.getmToDoDescription();
         mUserImportance = mUserToDoItem.getImportance();
+        mUserAttachs = mUserToDoItem.getAttachPaths();
         mUserType = mUserToDoItem.getType();
         mUserHasReminder = mUserToDoItem.hasReminder();
         mUserReminderDate = mUserToDoItem.getToDoDate();
@@ -211,30 +214,11 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         attach.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                // TODO Auto-generated method stub
-
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("file/*");
-                startActivityForResult(intent,PICKFILE_RESULT_CODE);
-            }
-            protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-                // TODO Auto-generated method stub
-                switch (requestCode) {
-                    case PICKFILE_RESULT_CODE:
-                        if (resultCode == RESULT_OK) {
-                            String FilePath = data.getData().getPath();
-//                            textFile.setText(FilePath);
-                        }
-                        break;
-
-                }
+                Intent i = new Intent(getContext(), AttachActivity.class);
+                i.putExtra(ATTACHS, mUserAttachs);
+                startActivityForResult(i, ATTACHMENT);
             }
         });
-
-
-
-
 
 
         mContainerLayout.setOnClickListener(new View.OnClickListener() {
@@ -672,6 +656,8 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         mTimeEditText.setText(formatDate(dateFormat, mUserReminderDate));
     }
 
+
+
     public void setReminderTextView() {
         if (mUserReminderDate != null) {
             mReminderTextView.setVisibility(View.VISIBLE);
@@ -726,6 +712,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         mUserToDoItem.setToDoDate(mUserReminderDate);
         mUserToDoItem.setTodoColor(getColorByType());
         mUserToDoItem.setImportance(mUserImportance);
+        mUserToDoItem.setAttahPaths(mUserAttachs);
         mUserToDoItem.setType(mUserType);
         i.putExtra(MainFragment.TODOITEM, mUserToDoItem);
         getActivity().setResult(result, i);
@@ -802,6 +789,26 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case ATTACHMENT:
+                if (resultCode == RESULT_OK) {
+                    try {
+                        ArrayList<String> news = (ArrayList<String>) data.getSerializableExtra(ATTACHS);
+                        mUserToDoItem.setAttahPaths(news);
+                        mUserAttachs.clear();
+                        mUserAttachs.addAll(news);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+
         }
     }
 

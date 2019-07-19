@@ -51,4 +51,7 @@
     <string name="Importance_filters">Importance filters</string>
     <string name="filter">filter</string>
     <string name="Type_filters">type filters</string>
+    <string name="add">add attachment</string>
+    <string name="back">back</string>
+    <string name="ok">ok</string>
 </resources>
