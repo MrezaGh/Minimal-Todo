@@ -38,6 +38,7 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.example.avjindersinghsekhon.minimaltodo.About.AboutActivity;
 import com.example.avjindersinghsekhon.minimaltodo.AddToDo.AddToDoActivity;
 import com.example.avjindersinghsekhon.minimaltodo.AddToDo.AddToDoFragment;
+import com.example.avjindersinghsekhon.minimaltodo.AddWorkHours.AddWorkActivity;
 import com.example.avjindersinghsekhon.minimaltodo.Analytics.AnalyticsApplication;
 import com.example.avjindersinghsekhon.minimaltodo.AppDefault.AppDefaultFragment;
 import com.example.avjindersinghsekhon.minimaltodo.R;
@@ -69,6 +70,7 @@ public class MainFragment extends AppDefaultFragment {
     public static ArrayList<ToDoItem> mToDoItemsArrayList;
     private RecyclerViewEmptySupport mRecyclerView;
     private FloatingActionButton mAddToDoItemFAB;
+    private FloatingActionButton mAddWorkHours;
     private LinearLayout buttons_layout;
     private CoordinatorLayout mCoordLayout;
     public static final String TODOITEM = "com.avjindersinghsekhon.com.avjindersinghsekhon.minimaltodo.MainActivity";
@@ -76,6 +78,7 @@ public class MainFragment extends AppDefaultFragment {
     private static final int REQUEST_ID_TODO_ITEM = 100;
     private static final int REQUEST_ID_FILTER = 200;
     private static final int REQUEST_ID_SORT = 300;
+    private static final int REQUEST_ID_WORK_ITEM = 300;
     private ToDoItem mJustDeletedToDoItem;
     private int mIndexOfDeletedToDoItem;
     public static final String DATE_TIME_FORMAT_12_HOUR = "MMM d, yyyy  h:mm a";
@@ -194,6 +197,20 @@ public class MainFragment extends AppDefaultFragment {
 //                startActivityForResult(newTodo, REQUEST_ID_TODO_ITEM, options.toBundle());
 
                 startActivityForResult(newTodo, REQUEST_ID_TODO_ITEM);
+            }
+        });
+
+
+        //==============adding work hours
+        mAddWorkHours = (FloatingActionButton) view.findViewById(R.id.addWork);
+        mAddWorkHours.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                app.send(this, "Action", "AddWork Pressed");
+                Intent newWork = new Intent(getContext(), AddWorkActivity.class);
+                //todo make work item and send it
+                startActivityForResult(newWork, REQUEST_ID_WORK_ITEM);
+
             }
         });
 

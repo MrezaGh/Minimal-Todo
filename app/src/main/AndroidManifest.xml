@@ -35,6 +35,11 @@
             android:parentActivityName=".Main.MainActivity"
             />
 
+        <activity android:name=".AddWorkHours.AddWorkActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".Main.MainActivity"
+            />
+
         <activity android:name=".About.AboutActivity"
             android:label="@string/app_name"
             android:parentActivityName=".Main.MainActivity"
