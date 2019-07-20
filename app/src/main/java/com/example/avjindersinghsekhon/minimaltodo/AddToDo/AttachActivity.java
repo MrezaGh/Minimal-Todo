@@ -16,8 +16,13 @@ import android.provider.OpenableColumns;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -25,12 +30,16 @@ import android.widget.Toast;
 import com.example.avjindersinghsekhon.minimaltodo.Analytics.AnalyticsApplication;
 import com.example.avjindersinghsekhon.minimaltodo.Main.MainFragment;
 import com.example.avjindersinghsekhon.minimaltodo.R;
+import com.example.avjindersinghsekhon.minimaltodo.RecyclerView.Item;
+import com.example.avjindersinghsekhon.minimaltodo.RecyclerView.MyAdapter;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ToDoItem;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
-public class AttachActivity extends AppCompatActivity implements MyAdapter.ItemClickListener {
+public class AttachActivity extends AppCompatActivity implements MyAdapter.ViewHolder.ClickListener {
 
     private static final int GET_NEW_FILE = 33;
     private int mTheme = -1;
@@ -40,8 +49,12 @@ public class AttachActivity extends AppCompatActivity implements MyAdapter.ItemC
     public static final String LIGHTTHEME = "com.avjindersekon.lighttheme";
 
     private ArrayList<String> paths;
-    private ArrayList<String> names;
+    private ArrayList<Item> items;
+    private static final String TAG = AttachActivity.class.getSimpleName();
+
     private MyAdapter adapter;
+    private ActionModeCallback actionModeCallback = new ActionModeCallback();
+    private ActionMode actionMode;
 
 
     @Override
@@ -60,7 +73,10 @@ public class AttachActivity extends AppCompatActivity implements MyAdapter.ItemC
         getBaseContext().setTheme(mTheme);
 
         paths = (ArrayList) getIntent().getSerializableExtra(AddToDoFragment.ATTACHS);
-        names = getNames(paths);
+        items = new ArrayList<>();
+        for (int i = 0; i < paths.size() ; ++i) {
+            items.add(new Item(getName(paths.get(i)), paths.get(i)));
+        }
 
         Button ab = (Button) findViewById(R.id.add_attach_button);
         ab.setOnClickListener(new View.OnClickListener() {
@@ -81,22 +97,13 @@ public class AttachActivity extends AppCompatActivity implements MyAdapter.ItemC
             }
         });
 
+        adapter = new MyAdapter(this, items);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.attach_RecyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MyAdapter(this, names);
-        adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
 
-    }
-
-    @Override
-    public void onItemClick(View view, int position) {
-        try {
-            showFile(paths.get(position));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public void startChoosingFile(){
@@ -115,7 +122,7 @@ public class AttachActivity extends AppCompatActivity implements MyAdapter.ItemC
                     try {
                         String path = getPath(getBaseContext(), data.getData());
                         paths.add(path);
-                        names.add(getName(path));
+                        items.add(new Item(getName(path), path));
                         adapter.notifyDataSetChanged();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -272,5 +279,96 @@ public class AttachActivity extends AppCompatActivity implements MyAdapter.ItemC
         }
     }
 
+
+    @Override
+    public void onItemClicked(int position) {
+        if (actionMode != null) {
+            toggleSelection(position);
+        } else {
+            try {
+                showFile(paths.get(position));
+            } catch (Exception e) {
+                Toast toast=Toast.makeText(getBaseContext(),"file does'nt exist!",Toast.LENGTH_SHORT);
+                toast.setMargin(50,50);
+                toast.show();
+            }
+        }
+    }
+
+    @Override
+    public boolean onItemLongClicked(int position) {
+        if (actionMode == null) {
+            actionMode = startSupportActionMode(actionModeCallback);
+        }
+
+        toggleSelection(position);
+
+        return true;
+    }
+
+    /**
+     * Toggle the selection state of an item.
+     *
+     * If the item was the last one in the selection and is unselected, the selection is stopped.
+     * Note that the selection must already be started (actionMode must not be null).
+     *
+     * @param position Position of the item to toggle the selection state
+     */
+    private void toggleSelection(int position) {
+        adapter.toggleSelection(position);
+        int count = adapter.getSelectedItemCount();
+
+        if (count == 0) {
+            actionMode.finish();
+        } else {
+            actionMode.setTitle(String.valueOf(count));
+            actionMode.invalidate();
+        }
+    }
+
+    private class ActionModeCallback implements ActionMode.Callback {
+        @SuppressWarnings("unused")
+        private final String TAG = ActionModeCallback.class.getSimpleName();
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mode.getMenuInflater().inflate (R.menu.selected_menu, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.menu_remove:
+                    ArrayList<Integer> dels = (ArrayList<Integer>) adapter.getSelectedItems();
+                    Collections.sort(dels, new Comparator<Integer>() {
+                        @Override
+                        public int compare(Integer integer, Integer t1) {
+                            return t1 - integer;
+                        }
+                    });
+                    for (Integer i : dels) {
+                        paths.remove((int)i);
+                    }
+                    adapter.removeItems(adapter.getSelectedItems());
+                    mode.finish();
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            adapter.clearSelection();
+            actionMode = null;
+        }
+    }
 
 }
