@@ -40,6 +40,12 @@
             android:parentActivityName=".Main.MainActivity"
             />
 
+        <activity android:name=".PersianToChristian.PersianToChristianActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".Main.MainActivity"
+            />
+
+
         <activity android:name=".About.AboutActivity"
             android:label="@string/app_name"
             android:parentActivityName=".Main.MainActivity"

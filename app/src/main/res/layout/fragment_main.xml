@@ -79,6 +79,18 @@
             app:layout_anchor="@id/myCoordinatorLayout"
             app:layout_anchorGravity="bottom|start|end" />
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/PersianToChristian"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="66dp"
+            android:src="@drawable/transform_icon"
+            app:layout_anchor="@id/myCoordinatorLayout"
+            app:layout_anchorGravity="bottom|center_horizontal" />
+
 
         <LinearLayout
             android:id="@+id/buttons"

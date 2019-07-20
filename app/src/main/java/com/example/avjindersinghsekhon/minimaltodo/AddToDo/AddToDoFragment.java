@@ -1,21 +1,11 @@
 package com.example.avjindersinghsekhon.minimaltodo.AddToDo;
 
 import android.animation.Animator;
-import android.content.ActivityNotFoundException;
-import android.content.ContentUris;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
-import android.provider.OpenableColumns;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
@@ -43,8 +33,6 @@ import android.widget.ArrayAdapter;
 
 import com.example.avjindersinghsekhon.minimaltodo.Analytics.AnalyticsApplication;
 import com.example.avjindersinghsekhon.minimaltodo.AppDefault.AppDefaultFragment;
-import com.example.avjindersinghsekhon.minimaltodo.Main.FilterActivity;
-import com.example.avjindersinghsekhon.minimaltodo.Main.MainActivity;
 import com.example.avjindersinghsekhon.minimaltodo.Main.MainFragment;
 import com.example.avjindersinghsekhon.minimaltodo.R;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ToDoItem;
@@ -54,8 +42,6 @@ import com.mohamadamin.persianmaterialdatetimepicker.utils.PersianCalendar;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.ArrayList;
@@ -86,6 +72,9 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
     private EditText mDateEditText;
     private EditText mTimeEditText;
+//    private EditText mDateEditTextPersian;
+//    private EditText mTimeEditTextPersian;
+
     private String mDefaultTimeOptions12H[];
     private String mDefaultTimeOptions24H[];
 
@@ -114,6 +103,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
     private String theme;
     private RadioGroup radioImportanceGroup;
     public static final int PICKFILE_RESULT_CODE = 1;
+
 //    TextView textFile;
     AnalyticsApplication app;
 
@@ -366,6 +356,9 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
         mDateEditText = (EditText) view.findViewById(R.id.newTodoDateEditText);
         mTimeEditText = (EditText) view.findViewById(R.id.newTodoTimeEditText);
 
+//        mDateEditTextPersian = (EditText) view.findViewById(R.id.newTodoDateEditTextPersian);
+//        mTimeEditTextPersian = (EditText) view.findViewById(R.id.newTodoTimeEditTextPersian);
+
         mDateEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -434,9 +427,33 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
             }
         });
 
+
+//        mDateEditTextPersian.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                hideKeyboard(mToDoTextBodyEditText);
+//
+//
+//
+//                PersianCalendar persianCalendar = new PersianCalendar();
+//                com.mohamadamin.persianmaterialdatetimepicker.date.DatePickerDialog datePickerDialog =
+//                        com.mohamadamin.persianmaterialdatetimepicker.date.DatePickerDialog.newInstance(
+//                                AddToDoFragment.this,
+//                                persianCalendar.getPersianYear(),
+//                                persianCalendar.getPersianMonth(),
+//                                persianCalendar.getPersianDay()
+//                        );
+//
+//                datePickerDialog.show(getActivity().getFragmentManager(), "DateFragment");
+//            }
+//        });
+//
+
+
 //        mDefaultTimeOptions12H = new String[]{"9:00 AM", "12:00 PM", "3:00 PM", "6:00 PM", "9:00 PM", "12:00 AM"};
 //        mDefaultTimeOptions24H = new String[]{"9:00", "12:00", "15:00", "18:00", "21:00", "24:00"};
-        setDateAndTimeEditText();//todo
+        setDateAndTimeEditText();
 
 //
 
