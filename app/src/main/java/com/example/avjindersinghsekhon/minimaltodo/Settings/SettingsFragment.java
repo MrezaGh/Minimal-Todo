@@ -94,7 +94,10 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 getActivity().getResources().updateConfiguration(config,
                         getActivity().getResources().getDisplayMetrics());
 //                getActivity().setContentView(R.layout.activity_settings);
-                getActivity().finish();
+                Intent i = getActivity().getIntent();///
+                getActivity().finish();///
+                startActivity(i);///
+//                getActivity().finish();
 
             } else {
                 mLanguageCode="en";
@@ -107,7 +110,10 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                 config.locale = locale;
                 getActivity().getResources().updateConfiguration(config,
                         getActivity().getResources().getDisplayMetrics());
-                getActivity().finish();
+                Intent i = getActivity().getIntent();///
+                getActivity().finish();///
+                startActivity(i);///
+//                getActivity().finish();
             }
 
         }else if (key.equals(preferenceKeys.newType_pref_key)){

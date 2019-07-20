@@ -60,6 +60,7 @@
         <activity android:name=".Main.SortActivity" />
         <activity android:name=".Main.FilterActivity" />
         <activity android:name=".AddToDo.AttachActivity" />
+        <activity android:name=".Group.GroupActivity" />
 
     </application>
 

@@ -61,4 +61,7 @@
     <string name="from">from:</string>
     <string name="to">to:</string>
     <string name="work_error">Empty Work Hours</string>
+    <string name="group">group todos</string>
+    <string name="prsonal">personal todos</string>
+    <string name="no_to_dos_group">you don\'t have any group todos</string>
 </resources>
