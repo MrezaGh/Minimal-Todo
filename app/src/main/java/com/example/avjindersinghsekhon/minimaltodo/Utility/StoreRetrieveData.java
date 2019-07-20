@@ -1,11 +1,10 @@
 package com.example.avjindersinghsekhon.minimaltodo.Utility;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v4.app.FragmentActivity;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,6 +19,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -53,6 +54,43 @@ public class StoreRetrieveData {
         String json = gson.toJson(filters);
         prefsEditor.putString("filters", json);
         prefsEditor.apply();
+    }
+
+    public static void saveWorkHours(Context activity, String workDay, String workFrom, String workTo){
+        SharedPreferences mPrefs = activity.getSharedPreferences("wh", MODE_PRIVATE);
+        SharedPreferences.Editor editor = mPrefs.edit();
+
+        ArrayList workHours = getWorkHours(activity);
+        if (workHours == null){
+            workHours = new ArrayList();
+        }
+        Map<String, String> workHour = new HashMap<String, String>();
+        workHour.put("workDay", workDay);
+        workHour.put("workFrom", workFrom);
+        workHour.put("workTo", workTo);
+        workHours.add(workHour);
+        Gson gson = new Gson();
+        String json = gson.toJson(workHours);
+        editor.putString("workHours", json);
+        editor.apply();
+    }
+
+    public static ArrayList getWorkHours(Context activity){
+        SharedPreferences mPrefs = activity.getSharedPreferences("wh", MODE_PRIVATE);
+
+        Gson gson = new Gson();
+        String json = mPrefs.getString("workHours", "");
+//        return gson.fromJson(json, ArrayList.class);
+        return gson.fromJson(json, new TypeToken<ArrayList<Map<String, String>>>(){}.getType());
+    }
+
+    public static void deleteWorkHours(Context activity){
+        SharedPreferences mPrefs = activity.getSharedPreferences("wh", MODE_PRIVATE);
+        SharedPreferences.Editor editor = mPrefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(new ArrayList<>());
+        editor.putString("workHours", json);
+        editor.apply();
     }
 
     public static void saveFilter(Context activity, FilterConstraints filterConstraints) {

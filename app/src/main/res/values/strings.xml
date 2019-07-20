@@ -60,4 +60,5 @@
     <string name="workHours">time you work. eg from 8 to 18:</string>
     <string name="from">from:</string>
     <string name="to">to:</string>
+    <string name="work_error">Empty Work Hours</string>
 </resources>

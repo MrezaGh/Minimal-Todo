@@ -57,17 +57,33 @@
         android:ems="10"
         android:inputType="time" />
 
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/addWorkFloatingActionButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:src="@drawable/ic_send_white_18dp"
-        app:fabSize="normal"
-        app:layout_anchor="@id/editTextParentLinearLayout"
-        app:layout_anchorGravity="bottom|right" />
+        android:orientation="horizontal">
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/addWorkFloatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/ic_send_white_18dp"
+            app:fabSize="normal"
+            app:layout_anchor="@id/editTextParentLinearLayout"
+            app:layout_anchorGravity="bottom|right" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/clearWorkFloatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/delete_icon"
+            app:fabSize="normal"
+            app:layout_anchor="@id/editTextParentLinearLayout"
+            app:layout_anchorGravity="bottom|right" />
+
+    </LinearLayout>
 
     <View
         android:id="@+id/divider"
@@ -82,9 +98,10 @@
         android:text="Your Work Days Are:" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/work_hours"
         android:layout_width="match_parent"
-        android:layout_height="95dp"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
         android:text="no work Determined yet" />
 
 
