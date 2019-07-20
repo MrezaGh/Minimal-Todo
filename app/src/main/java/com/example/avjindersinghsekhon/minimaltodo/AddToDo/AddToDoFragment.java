@@ -44,10 +44,13 @@ import android.widget.ArrayAdapter;
 import com.example.avjindersinghsekhon.minimaltodo.Analytics.AnalyticsApplication;
 import com.example.avjindersinghsekhon.minimaltodo.AppDefault.AppDefaultFragment;
 import com.example.avjindersinghsekhon.minimaltodo.Main.FilterActivity;
+import com.example.avjindersinghsekhon.minimaltodo.Main.MainActivity;
 import com.example.avjindersinghsekhon.minimaltodo.Main.MainFragment;
 import com.example.avjindersinghsekhon.minimaltodo.R;
 import com.example.avjindersinghsekhon.minimaltodo.Utility.ToDoItem;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+
+import com.mohamadamin.persianmaterialdatetimepicker.utils.PersianCalendar;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
@@ -64,7 +67,9 @@ import static android.app.Activity.RESULT_OK;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 
-public class AddToDoFragment extends AppDefaultFragment implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class AddToDoFragment extends AppDefaultFragment implements DatePickerDialog.OnDateSetListener,
+        TimePickerDialog.OnTimeSetListener, com.mohamadamin.persianmaterialdatetimepicker.date.DatePickerDialog.OnDateSetListener ,
+        com.mohamadamin.persianmaterialdatetimepicker.time.TimePickerDialog.OnTimeSetListener {
     private static final String TAG = "AddToDoFragment";
     private Date mLastEdited;
 
@@ -373,19 +378,33 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
                 } else {
                     date = new Date();
                 }
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(date);
-                int year = calendar.get(Calendar.YEAR);
-                int month = calendar.get(Calendar.MONTH);
-                int day = calendar.get(Calendar.DAY_OF_MONTH);
 
+                boolean persian = false;
+                if (persian){
+                    PersianCalendar persianCalendar = new PersianCalendar();
+                    persianCalendar.setPersianDate(1398, 1, 1);
+                    com.mohamadamin.persianmaterialdatetimepicker.date.DatePickerDialog datePickerDialog =
+                            com.mohamadamin.persianmaterialdatetimepicker.date.DatePickerDialog.newInstance(
+                                AddToDoFragment.this,
+                                persianCalendar.getPersianYear(),
+                                persianCalendar.getPersianMonth(),
+                                persianCalendar.getPersianDay()
+                    );
 
-                DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(AddToDoFragment.this, year, month, day);
-                if (theme.equals(MainFragment.DARKTHEME)) {
-                    datePickerDialog.setThemeDark(true);
+                    datePickerDialog.show(getActivity().getFragmentManager(), "DateFragment");
+                }else{
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(date);
+                    int year = calendar.get(Calendar.YEAR);
+                    int month = calendar.get(Calendar.MONTH);
+                    int day = calendar.get(Calendar.DAY_OF_MONTH);
+                    DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(AddToDoFragment.this, year, month, day);
+
+                    if (theme.equals(MainFragment.DARKTHEME)) {
+                        datePickerDialog.setThemeDark(true);
+                    }
+                    datePickerDialog.show(getActivity().getFragmentManager(), "DateFragment");
                 }
-                datePickerDialog.show(getActivity().getFragmentManager(), "DateFragment");
-
             }
         });
 
@@ -417,7 +436,7 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
 //        mDefaultTimeOptions12H = new String[]{"9:00 AM", "12:00 PM", "3:00 PM", "6:00 PM", "9:00 PM", "12:00 AM"};
 //        mDefaultTimeOptions24H = new String[]{"9:00", "12:00", "15:00", "18:00", "21:00", "24:00"};
-        setDateAndTimeEditText();
+        setDateAndTimeEditText();//todo
 
 //
 
@@ -894,5 +913,15 @@ public class AddToDoFragment extends AppDefaultFragment implements DatePickerDia
 
     public static AddToDoFragment newInstance() {
         return new AddToDoFragment();
+    }
+
+    @Override
+    public void onDateSet(com.mohamadamin.persianmaterialdatetimepicker.date.DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        setDate(year, monthOfYear, dayOfMonth);
+    }
+
+    @Override
+    public void onTimeSet(com.mohamadamin.persianmaterialdatetimepicker.time.RadialPickerLayout view, int hourOfDay, int minute) {
+        setTime(hourOfDay, minute);
     }
 }
